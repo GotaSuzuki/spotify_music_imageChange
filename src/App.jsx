@@ -3,6 +3,7 @@ import { useState } from "react";
 import MainContainer from "./components/MainContainer";
 import { ImagesChange } from "./components/ImagesChange";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { Button } from "@mui/material";
 
 function App() {
   const [images, setImages] = useState([
@@ -31,13 +32,25 @@ function App() {
           <nav>
             <ul style={{ display: "flex" }}>
               <li style={{ listStyle: "none", marginRight: "50px" }}>
-                <Link to="/">ホーム</Link>
+                <Link to="/">
+                  <Button variant="contained" color="primary">
+                    ホーム
+                  </Button>
+                </Link>
               </li>
               <li style={{ listStyle: "none" }}>
-                <Link to="/music">音楽へ</Link>
+                <Link to="/music">
+                  <Button variant="contained" color="success">
+                    音楽へ
+                  </Button>
+                </Link>
               </li>
               <li style={{ listStyle: "none", marginLeft: "50px" }}>
-                <Link to="/change">画像順番変更</Link>
+                <Link to="/change">
+                  <Button variant="contained" color="warning">
+                    画像順番変更
+                  </Button>
+                </Link>
               </li>
             </ul>
           </nav>
