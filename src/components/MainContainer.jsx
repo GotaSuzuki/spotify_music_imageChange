@@ -38,7 +38,7 @@ const MainContainer = ({ images }) => {
         if (currentImg) {
           setCurrentImage(currentImg.src);
         } else {
-          setCurrentImage(null); // どの画像も一致しない場合
+          setCurrentImage(images[0]); // どの画像も一致しない場合
         }
 
         if (audio.currentTime >= 30) {

@@ -86,7 +86,7 @@ export const ImagesChange = ({ images, setImages }) => {
               variant: "success",
               anchorOrigin: {
                 vertical: "top",
-                horizontal: "top",
+                horizontal: "center",
               },
               action,
             });
