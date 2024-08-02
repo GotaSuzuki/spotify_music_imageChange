@@ -2,6 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import MainContainer from "./components/MainContainer";
 import { ImagesChange } from "./components/ImagesChange";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 
 function App() {
   const [images, setImages] = useState([
@@ -25,9 +26,47 @@ function App() {
 
   return (
     <>
-      <MainContainer images={images} />
-      <ImagesChange images={images} setImages={setImages} />
+      <BrowserRouter>
+        <div>
+          <nav>
+            <ul style={{ display: "flex" }}>
+              <li style={{ listStyle: "none", marginRight: "50px" }}>
+                <Link to="/">ホーム</Link>
+              </li>
+              <li style={{ listStyle: "none" }}>
+                <Link to="/music">音楽へ</Link>
+              </li>
+              <li style={{ listStyle: "none", marginLeft: "50px" }}>
+                <Link to="/change">画像変更</Link>
+              </li>
+            </ul>
+          </nav>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/music" element={<MainContainer images={images} />} />
+            <Route
+              path="/change"
+              element={<ImagesChange images={images} setImages={setImages} />}
+            />
+          </Routes>
+        </div>
+      </BrowserRouter>
+      {/* <MainContainer images={images} />
+      <ImagesChange images={images} setImages={setImages} /> */}
     </>
   );
 }
+
+function Home() {
+  return;
+}
+
+function AppWrapper() {
+  return (
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  );
+}
+
 export default App;
