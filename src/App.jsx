@@ -37,7 +37,7 @@ function App() {
                 <Link to="/music">音楽へ</Link>
               </li>
               <li style={{ listStyle: "none", marginLeft: "50px" }}>
-                <Link to="/change">画像変更</Link>
+                <Link to="/change">画像順番変更</Link>
               </li>
             </ul>
           </nav>
@@ -51,8 +51,6 @@ function App() {
           </Routes>
         </div>
       </BrowserRouter>
-      {/* <MainContainer images={images} />
-      <ImagesChange images={images} setImages={setImages} /> */}
     </>
   );
 }

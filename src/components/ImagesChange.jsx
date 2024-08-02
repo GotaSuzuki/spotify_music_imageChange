@@ -3,6 +3,9 @@ import { SortableItem } from "./SortableItem";
 import { Box, Stack } from "@mui/material";
 import { DndContext } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
+import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 
 export const ImagesChange = ({ images, setImages }) => {
   const originalTimes = [
@@ -25,41 +28,73 @@ export const ImagesChange = ({ images, setImages }) => {
     setImages(newImages);
   };
 
+  const action = (key) => (
+    <IconButton
+      aria-label="Close"
+      color="inherit"
+      onClick={() => closeSnackbar(key)}
+    >
+      <CloseIcon />
+    </IconButton>
+  );
+
   return (
-    <div>
-      {" "}
-      <Box sx={{ padding: 1 }}>
-        <Box sx={{ p: 2, border: "2px solid black", overflowX: "auto" }}>
-          <DndContext
-            onDragEnd={(event) => {
-              const { active, over } = event;
-              if (over == null) {
-                return;
-              }
-              if (active.id !== over.id) {
-                setImages((images) => {
-                  const oldIndex = images.findIndex(
-                    (image) => image.id === active.id
-                  );
-                  const newIndex = images.findIndex(
-                    (image) => image.id === over.id
-                  );
-                  return arrayMove(images, oldIndex, newIndex);
-                });
-              }
-            }}
-          >
-            <SortableContext items={images}>
-              <Stack direction="row" spacing={2} sx={{ flexWrap: "nowrap" }}>
-                {images.map((image) => (
-                  <SortableItem id={image.id} name={image.src} key={image.id} />
-                ))}
-              </Stack>
-            </SortableContext>
-          </DndContext>
+    <>
+      <div>
+        {" "}
+        <Box sx={{ padding: 1 }}>
+          <Box sx={{ p: 2, border: "2px solid black", overflowX: "auto" }}>
+            <DndContext
+              onDragEnd={(event) => {
+                const { active, over } = event;
+                if (over == null) {
+                  return;
+                }
+                if (active.id !== over.id) {
+                  setImages((images) => {
+                    const oldIndex = images.findIndex(
+                      (image) => image.id === active.id
+                    );
+                    const newIndex = images.findIndex(
+                      (image) => image.id === over.id
+                    );
+                    return arrayMove(images, oldIndex, newIndex);
+                  });
+                }
+              }}
+            >
+              <SortableContext items={images}>
+                <Stack direction="row" spacing={2} sx={{ flexWrap: "nowrap" }}>
+                  {images.map((image) => (
+                    <SortableItem
+                      id={image.id}
+                      name={image.src}
+                      key={image.id}
+                    />
+                  ))}
+                </Stack>
+              </SortableContext>
+            </DndContext>
+          </Box>
         </Box>
-      </Box>
-      <button onClick={saveImages}>保存</button>
-    </div>
+        <SnackbarProvider />
+        <button
+          onClick={() => {
+            saveImages();
+            enqueueSnackbar("保存成功", {
+              persist: true,
+              variant: "success",
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "top",
+              },
+              action,
+            });
+          }}
+        >
+          保存
+        </button>
+      </div>
+    </>
   );
 };
