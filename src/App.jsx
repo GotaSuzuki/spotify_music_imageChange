@@ -1,99 +1,22 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MainContainer from "./components/MainContainer";
 import { ImagesChange } from "./components/ImagesChange";
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import { Link, Route, Routes } from "react-router-dom";
+import { Button } from "@mui/material";
 import Images from "./components/Images";
 import SignUp from "./components/SignUp";
-import supabase from "./lib/supabase";
 import Login from "./components/Login";
+import Drawer from "./components/Drawer";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 function App() {
-  const [open, setOpen] = useState();
   const [userName, setUserName] = useState("");
-  const navigate = useNavigate();
-
-  const updateUserName = async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (data && data.user && data.user.user_metadata) {
-      const displayName =
-        data.user.user_metadata.display_name ||
-        `${data.user.user_metadata.last_name} ${data.user.user_metadata.first_name}`.trim();
-      setUserName(displayName);
-    } else {
-      setUserName("");
-    }
-  };
-
-  useEffect(() => {
-    updateUserName();
-  }, []);
-
-  const handleItemClick = async (text) => {
-    switch (text) {
-      case "登録":
-        navigate("/SignUp");
-        break;
-      case "ログイン":
-        navigate("/login");
-        break;
-      case "ログアウト":
-        await Logout();
-        break;
-      default:
-        toggleDrawer(false)();
-    }
-    setOpen(false);
-  };
-
-  const Logout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      setUserName("");
-      if (error) throw error;
-      alert("ログアウトしました");
-      setOpen(false);
-      navigate("/");
-    } catch {
-      alert("エラーが発生しました");
-    }
-  };
+  const [open, setOpen] = useState();
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
-
-  const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
-        {["登録", "ログイン", "ログアウト"].map((text) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton
-              onClick={() => handleItemClick(text)}
-              disabled={
-                (userName && (text === "登録" || text === "ログイン")) ||
-                (!userName && text === "ログアウト")
-              }
-            >
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-    </Box>
-  );
 
   const [images, setImages] = useState([
     { src: "/images/image01.jpg", start: 0, end: 2.5, id: 1 },
@@ -116,12 +39,13 @@ function App() {
 
   return (
     <>
-      <div>
-        <Drawer open={open} onClose={toggleDrawer(false)}>
-          <h2 style={{ paddingLeft: "20px" }}>{userName || "ゲスト"}さん</h2>
-          {DrawerList}
-        </Drawer>
-      </div>
+      <Drawer
+        userName={userName}
+        setUserName={setUserName}
+        toggleDrawer={toggleDrawer}
+        open={open}
+        setOpen={setOpen}
+      />
       <header
         style={{
           position: "fixed",
