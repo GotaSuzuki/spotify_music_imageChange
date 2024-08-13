@@ -1,6 +1,6 @@
 import React from "react";
 import { SortableItem } from "./SortableItem";
-import { Box, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { DndContext } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import CloseIcon from "@mui/icons-material/Close";
@@ -78,7 +78,9 @@ export const ImagesChange = ({ images, setImages }) => {
           </Box>
         </Box>
         <SnackbarProvider />
-        <button
+        <Button
+          variant="contained"
+          color="primary"
           onClick={() => {
             saveImages();
             enqueueSnackbar("保存成功", {
@@ -93,7 +95,7 @@ export const ImagesChange = ({ images, setImages }) => {
           }}
         >
           保存
-        </button>
+        </Button>
       </div>
     </>
   );

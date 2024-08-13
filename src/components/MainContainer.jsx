@@ -31,7 +31,7 @@ const MainContainer = ({ images }) => {
 
       const updateTime = () => {
         setCurrentTime(audio.currentTime);
-        //上記のimagesのtime(start,end)によってstateに格納
+        //Appコンポーネントのimagesのtime(start,end)によってstateに格納
         const currentImg = images.find(
           (img) => audio.currentTime >= img.start && audio.currentTime < img.end
         );
