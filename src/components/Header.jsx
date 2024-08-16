@@ -48,15 +48,8 @@ const Header = ({ toggleDrawer }) => {
             </Link>
           </li>
           <li style={{ listStyle: "none", padding: "30px" }}>
-            <Link to="/change">
-              <Button variant="contained" color="warning">
-                画像順番変更
-              </Button>
-            </Link>
-          </li>
-          <li style={{ listStyle: "none", padding: "30px" }}>
             <Link to="/images">
-              <Button variant="contained" color="info">
+              <Button variant="contained" color="warning">
                 画像アップロード
               </Button>
             </Link>

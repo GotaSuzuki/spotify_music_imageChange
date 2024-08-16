@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import supabase from "../lib/supabase";
 import { Button, FormHelperText, Input, InputLabel } from "@mui/material";
 import { FormControl } from "@mui/material";
+import { useSetRecoilState } from "recoil";
+import { userIdState } from "../atoms/useIdState";
 
 const Login = ({ setUserName }) => {
   const [email, setEmail] = useState("");
@@ -10,14 +12,20 @@ const Login = ({ setUserName }) => {
   const [passwordConf, setPasswordConf] = useState("");
   const navigate = useNavigate();
 
+  const setUserId = useSetRecoilState(userIdState);
+
   const onLogin = async (e) => {
     e.preventDefault();
     try {
-      console.log(email, password);
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
       });
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUserId(user.id);
 
       const displayName =
         data.user.user_metadata.display_name ||
@@ -80,7 +88,6 @@ const Login = ({ setUserName }) => {
           </form>
         </div>
       </main>
-      <footer></footer>
     </div>
   );
 };

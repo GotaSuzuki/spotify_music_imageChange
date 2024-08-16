@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import supabase from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,9 +9,15 @@ import {
   ListItemText,
   Drawer as MuiDrawer,
 } from "@mui/material";
+import { useSetRecoilState } from "recoil";
+import { userIdState } from "../atoms/useIdState";
+import { imagesState } from "../atoms/imagesState";
 
 const Drawer = ({ open, setOpen, userName, setUserName, toggleDrawer }) => {
   const navigate = useNavigate();
+
+  const setUserId = useSetRecoilState(userIdState);
+  const setRecoilImages = useSetRecoilState(imagesState);
 
   const updateUserName = async () => {
     const { data, error } = await supabase.auth.getUser();
@@ -20,8 +26,10 @@ const Drawer = ({ open, setOpen, userName, setUserName, toggleDrawer }) => {
         data.user.user_metadata.display_name ||
         `${data.user.user_metadata.last_name} ${data.user.user_metadata.first_name}`.trim();
       setUserName(displayName);
+      setUserId(data.user.id);
     } else {
       setUserName("");
+      setUserId("");
     }
   };
 
@@ -50,6 +58,8 @@ const Drawer = ({ open, setOpen, userName, setUserName, toggleDrawer }) => {
     try {
       const { error } = await supabase.auth.signOut();
       setUserName("");
+      setUserId("");
+      setRecoilImages([]);
       if (error) throw error;
       alert("ログアウトしました");
       setOpen(false);
