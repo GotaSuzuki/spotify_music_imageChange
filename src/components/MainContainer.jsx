@@ -3,14 +3,32 @@ import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import spotify from "../lib/spotify";
 import { useEffect } from "react";
+import { imagesState } from "../atoms/imagesState";
+import useCommon from "../hooks/useCommon";
+import { useRecoilState } from "recoil";
 
-const MainContainer = ({ images }) => {
+const MainContainer = () => {
   const [track, setTrack] = useState(null);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [currentImage, setCurrentImage] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
+
+  const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
+
+  const { getImages } = useCommon();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (recoilImages.length === 0) {
+        await getImages();
+      }
+    };
+
+    fetchData();
+    console.log(recoilImages);
+  }, []);
 
   //特定の音楽を取得
   useEffect(() => {
@@ -31,14 +49,14 @@ const MainContainer = ({ images }) => {
 
       const updateTime = () => {
         setCurrentTime(audio.currentTime);
-        //上記のimagesのtime(start,end)によってstateに格納
-        const currentImg = images.find(
+        //recoilImagesのtime(start,end)によってstateに格納
+        const currentImg = recoilImages.find(
           (img) => audio.currentTime >= img.start && audio.currentTime < img.end
         );
         if (currentImg) {
-          setCurrentImage(currentImg.src);
+          setCurrentImage(currentImg.publicUrl);
         } else {
-          setCurrentImage(null); // どの画像も一致しない場合
+          setCurrentImage(recoilImages[0]); // どの画像も一致しない場合
         }
 
         if (audio.currentTime >= 30) {
@@ -57,7 +75,7 @@ const MainContainer = ({ images }) => {
         );
       };
     }
-  }, [track, images]);
+  }, [track, recoilImages]);
 
   //再生と停止の制御
   const handlePlayClick = () => {
@@ -96,7 +114,6 @@ const MainContainer = ({ images }) => {
             key={currentImage}
             style={{ width: "600px", height: "500px" }}
             src={currentImage}
-            alt="Current"
             initial={{ x: 0, y: -200, scale: 0 }}
             animate={{ x: 0, y: 0, scale: 1 }}
             transition={{ duration: 0.6, type: "spring", bounce: 0.8 }}
