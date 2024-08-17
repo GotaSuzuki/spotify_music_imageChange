@@ -21,12 +21,13 @@ const MainContainer = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await getImages();
+      if (recoilImages.length === 0) {
+        await getImages();
+      }
     };
 
-    if (recoilImages.length === 0) {
-      fetchData();
-    }
+    fetchData();
+    console.log(recoilImages);
   }, []);
 
   //特定の音楽を取得

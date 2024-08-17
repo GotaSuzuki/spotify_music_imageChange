@@ -34,7 +34,7 @@ const Header = ({ toggleDrawer }) => {
             </Button>
           </li>
           <li style={{ listStyle: "none", padding: "30px" }}>
-            <Link to="/">
+            <Link to="/Home">
               <Button variant="contained" color="primary">
                 ホーム
               </Button>

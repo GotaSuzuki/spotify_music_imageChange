@@ -7,6 +7,7 @@ import SignUp from "./components/SignUp";
 import Login from "./components/Login";
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";
+import Home from "./components/Home";
 import { useRecoilState } from "recoil";
 import { userIdState } from "./atoms/useIdState";
 
@@ -37,7 +38,7 @@ function App() {
           element={<Login setUserName={setUserName} setUserId={setUserId} />}
         />
         <Route path="/SignUp" element={<SignUp setUserName={setUserName} />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/Home" element={<Home />} />
         <Route
           path="/music"
           element={
@@ -51,10 +52,6 @@ function App() {
       </Routes>
     </>
   );
-}
-
-function Home() {
-  return;
 }
 
 export default App;
