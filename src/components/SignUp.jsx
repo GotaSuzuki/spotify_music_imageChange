@@ -32,7 +32,7 @@ const SignUp = ({ setUserName }) => {
       if (error) throw error;
       setUserName(`${lastName} ${firstName}`.trim());
       alert("登録しました");
-      navigate("/Home");
+      navigate("/");
     } catch (error) {
       alert("エラーが発生しました: " + error.message);
     }
