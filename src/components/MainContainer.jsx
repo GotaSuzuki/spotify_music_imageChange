@@ -95,16 +95,11 @@ const MainContainer = () => {
 
   return (
     <div>
-      <div
-        style={{
-          position: "relative",
-          top: "0",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "10%",
-        }}
-      >
-        <h1 onClick={handlePlayClick} style={{ cursor: "pointer" }}>
+      <div>
+        <h1
+          onClick={handlePlayClick}
+          style={{ cursor: "pointer", marginTop: "40px" }}
+        >
           {track.name}
         </h1>
       </div>
@@ -112,7 +107,7 @@ const MainContainer = () => {
         {currentImage && (
           <motion.img
             key={currentImage}
-            style={{ width: "600px", height: "500px" }}
+            style={{ width: "500px", height: "400px" }}
             src={currentImage}
             initial={{ x: 0, y: -200, scale: 0 }}
             animate={{ x: 0, y: 0, scale: 1 }}

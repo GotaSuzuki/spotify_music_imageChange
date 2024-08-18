@@ -15,7 +15,7 @@ const useCommon = () => {
   const getImages = async () => {
     const { data, error } = await supabase.storage.from("images").list("", {
       // ルートフォルダを指定する場合は空文字列を使用
-      limit: 16,
+      limit: 17,
       offset: 0,
       sortBy: { column: "last_accessed_at", order: "desc" },
     });
