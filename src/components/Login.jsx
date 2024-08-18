@@ -33,7 +33,7 @@ const Login = ({ setUserName }) => {
       setUserName(displayName);
 
       alert("ログインしました");
-      navigate("/Home");
+      navigate("/");
     } catch {
       alert("エラーが発生しました");
     }

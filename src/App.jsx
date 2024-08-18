@@ -29,16 +29,12 @@ function App() {
         toggleDrawer={toggleDrawer}
         open={open}
         setOpen={setOpen}
-        setUserId={setUserId}
       />
       <Header toggleDrawer={toggleDrawer} />
       <Routes>
-        <Route
-          path="/login"
-          element={<Login setUserName={setUserName} setUserId={setUserId} />}
-        />
+        <Route path="/login" element={<Login setUserName={setUserName} />} />
         <Route path="/SignUp" element={<SignUp setUserName={setUserName} />} />
-        <Route path="/Home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route
           path="/music"
           element={

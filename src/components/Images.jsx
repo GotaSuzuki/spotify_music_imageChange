@@ -10,12 +10,14 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { imagesState } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { userIdState } from "../atoms/useIdState";
+import { red } from "@mui/material/colors";
 
 const Images = () => {
   const originalTimes = [
     0, 2.5, 4.4, 6.2, 8, 9.8, 11.7, 13.6, 15.5, 17.3, 19.1, 21, 22.8, 24.6,
     26.4, 28.2, 30,
   ];
+  const MAX_IMAGES_LENGTH = 16;
 
   const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
   const userId = useRecoilValue(userIdState);
@@ -84,6 +86,16 @@ const Images = () => {
     <>
       <div style={{ marginTop: "40px" }}>
         <SnackbarProvider />
+      </div>
+      <div>
+        {recoilImages.length < MAX_IMAGES_LENGTH - 1 && (
+          <div>
+            残りの画像保存枚数：
+            <span style={{ color: "red" }}>
+              {MAX_IMAGES_LENGTH - 1 - recoilImages.length}
+            </span>
+          </div>
+        )}
       </div>
       <div className="mt-5">
         <input type="file" onChange={(e) => uploadImage(e)} />
