@@ -10,6 +10,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import { useRecoilState } from "recoil";
 import { userIdState } from "./atoms/useIdState";
+import ImagesList from "./components/ImagesList";
 
 function App() {
   const [userName, setUserName] = useState("");
@@ -44,6 +45,10 @@ function App() {
         <Route
           path="/images"
           element={userId ? <Images /> : <Navigate replace to="/login" />}
+        />
+        <Route
+          path="/imagesList"
+          element={userId ? <ImagesList /> : <Navigate replace to="/login" />}
         />
       </Routes>
     </>
