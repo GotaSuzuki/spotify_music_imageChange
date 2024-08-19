@@ -10,7 +10,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { imagesState } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { userIdState } from "../atoms/useIdState";
-import { red } from "@mui/material/colors";
 
 const Images = () => {
   const originalTimes = [
@@ -28,7 +27,7 @@ const Images = () => {
     if (recoilImages.length === 0) {
       getImages();
     }
-  }, []);
+  }, [recoilImages]);
 
   const saveMedia = () => {
     const newImages = recoilImages.map((image, index) => {
@@ -88,11 +87,11 @@ const Images = () => {
         <SnackbarProvider />
       </div>
       <div>
-        {recoilImages.length < MAX_IMAGES_LENGTH - 1 && (
+        {recoilImages.length < MAX_IMAGES_LENGTH && (
           <div>
             残りの画像保存枚数：
             <span style={{ color: "red" }}>
-              {MAX_IMAGES_LENGTH - 1 - recoilImages.length}
+              {MAX_IMAGES_LENGTH - recoilImages.length}
             </span>
           </div>
         )}
