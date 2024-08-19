@@ -10,7 +10,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { imagesState } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { userIdState } from "../atoms/useIdState";
-import { red } from "@mui/material/colors";
 
 const Images = () => {
   const originalTimes = [

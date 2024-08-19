@@ -27,7 +27,6 @@ const MainContainer = () => {
     };
 
     fetchData();
-    console.log(recoilImages);
   }, []);
 
   //特定の音楽を取得
