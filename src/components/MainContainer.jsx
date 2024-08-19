@@ -97,9 +97,9 @@ const MainContainer = () => {
       <div>
         <h1
           onClick={handlePlayClick}
-          style={{ cursor: "pointer", marginTop: "40px" }}
+          style={{ cursor: "pointer", marginTop: "45px" }}
         >
-          {track.name}
+          {isPlaying ? <div>停止</div> : <div>再生</div>}
         </h1>
       </div>
       <AnimatePresence>
@@ -115,7 +115,6 @@ const MainContainer = () => {
         )}
       </AnimatePresence>
       <audio ref={audioRef} />
-      {/* <div>Current Time: {currentTime.toFixed(5)} seconds</div> */}
     </div>
   );
 };

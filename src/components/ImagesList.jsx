@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import supabase from "../lib/supabase";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { userIdState } from "../atoms/useIdState";
 
 import Table from "@mui/material/Table";
@@ -13,14 +13,20 @@ import Paper from "@mui/material/Paper";
 import { Button, IconButton } from "@mui/material";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import CloseIcon from "@mui/icons-material/Close";
+import { imagesState } from "../atoms/imagesState";
 
 const ImagesList = () => {
-  const [imagesList, setImagesList] = useState([]);
+  const originalTimes = [
+    0, 2.5, 4.4, 6.2, 8, 9.8, 11.7, 13.6, 15.5, 17.3, 19.1, 21, 22.8, 24.6,
+    26.4, 28.2, 30,
+  ];
+
+  const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
   const userId = useRecoilValue(userIdState);
 
   useEffect(() => {
     getAllImages();
-  }, [imagesList]);
+  }, [recoilImages]);
 
   const getAllImages = async () => {
     const { data, error } = await supabase.storage.from("images").list("", {
@@ -36,11 +42,13 @@ const ImagesList = () => {
     // 各ファイルのpublicUrlを生成
     const imagesWithUrls = data
       .filter((image) => image.name.startsWith(userId))
-      .map((image) => {
+      .map((image, index) => {
+        const start = originalTimes[index];
+        const end = originalTimes[index + 1];
         const {
           data: { publicUrl },
         } = supabase.storage.from("images").getPublicUrl(image.name);
-        return { ...image, publicUrl };
+        return { ...image, publicUrl, start, end };
       });
 
     // 画像名からuserIdを消去
@@ -54,11 +62,10 @@ const ImagesList = () => {
       return newImageName;
     });
 
-    setImagesList(cutImagesName);
+    setRecoilImages(cutImagesName);
   };
 
   const handleDelete = async (name) => {
-    console.log(name);
     const { data, error } = await supabase.storage
       .from("images")
       .remove([userId + name]);
@@ -106,7 +113,7 @@ const ImagesList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {imagesList.map((image) => (
+              {recoilImages.map((image) => (
                 <TableRow
                   key={image.name}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
