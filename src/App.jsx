@@ -15,7 +15,6 @@ import ImagesList from "./components/ImagesList";
 function App() {
   const [userName, setUserName] = useState("");
   const [open, setOpen] = useState();
-
   const [userId, setUserId] = useRecoilState(userIdState);
 
   const toggleDrawer = (newOpen) => () => {
