@@ -25,10 +25,10 @@ const Images = () => {
   const { getImages } = useCommon();
 
   useEffect(() => {
-    if (recoilImages.length === 0) {
+    if (recoilImagesLength === 0) {
       getImages();
     }
-  }, [recoilImages]);
+  }, []);
 
   const saveMedia = () => {
     const newImages = recoilImages.map((image, index) => {
