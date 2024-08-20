@@ -10,6 +10,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { imagesState, recoilImagesLengthSelector } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { userIdState } from "../atoms/useIdState";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import InputFileUpload from "./FileButton";
 
 const Images = () => {
   const originalTimes = [
@@ -54,31 +56,34 @@ const Images = () => {
     </IconButton>
   );
 
-  const uploadImage = async (e) => {
-    let file = e.target.files[0];
-    const fileName = userId + file.name;
+  const uploadImage = async (file) => {
+    try {
+      const fileName = userId + file.name;
 
-    const { data: existingFile, error: duplicateError } = await supabase.storage
-      .from("images")
-      .list("", {
-        limit: 1,
-        offset: 0,
-        search: fileName,
-      });
+      const { data: existingFile, error: duplicateError } =
+        await supabase.storage.from("images").list("", {
+          limit: 1,
+          offset: 0,
+          search: fileName,
+        });
 
-    if (existingFile && existingFile.length > 0) {
-      alert("同じファイル名で登録することは出来ません");
-      return;
-    }
+      if (existingFile && existingFile.length > 0) {
+        alert("同じファイル名で登録することは出来ません");
+        return;
+      }
 
-    const { data, error } = await supabase.storage
-      .from("images")
-      .upload(userId + file.name, file);
+      const { data, error } = await supabase.storage
+        .from("images")
+        .upload(fileName, file);
 
-    if (error) {
+      if (error) {
+        throw error;
+      }
+
+      await getImages(); // アップロード後に画像リストを更新
+    } catch (error) {
       console.error("Error uploading image:", error);
-    } else {
-      getImages(); // アップロード後に画像リストを更新
+      alert("画像のアップロードに失敗しました。");
     }
   };
 
@@ -97,9 +102,8 @@ const Images = () => {
           </div>
         )}
       </div>
-      <div className="mt-5">
-        <input type="file" onChange={(e) => uploadImage(e)} />
-      </div>
+
+      <InputFileUpload uploadImage={uploadImage} />
       <div>
         <Box sx={{ padding: 1 }}>
           <Box sx={{ p: 2, border: "2px solid black", overflowX: "auto" }}>
