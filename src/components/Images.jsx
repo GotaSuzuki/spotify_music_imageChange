@@ -7,7 +7,7 @@ import { SortableItem } from "./SortableItem";
 import CloseIcon from "@mui/icons-material/Close";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { imagesState } from "../atoms/imagesState";
+import { imagesState, recoilImagesLengthSelector } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { userIdState } from "../atoms/useIdState";
 
@@ -20,6 +20,7 @@ const Images = () => {
 
   const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
   const userId = useRecoilValue(userIdState);
+  const recoilImagesLength = useRecoilValue(recoilImagesLengthSelector);
 
   const { getImages } = useCommon();
 
@@ -87,11 +88,11 @@ const Images = () => {
         <SnackbarProvider />
       </div>
       <div>
-        {recoilImages.length < MAX_IMAGES_LENGTH && (
+        {recoilImagesLength < MAX_IMAGES_LENGTH && (
           <div>
             残りの画像保存枚数：
             <span style={{ color: "red" }}>
-              {MAX_IMAGES_LENGTH - recoilImages.length}
+              {MAX_IMAGES_LENGTH - recoilImagesLength}
             </span>
           </div>
         )}
