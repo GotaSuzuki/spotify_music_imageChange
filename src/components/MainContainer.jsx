@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { imagesState } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { useRecoilState } from "recoil";
+import ReactFullscreen from "react-easyfullscreen";
+import { Button } from "@mui/material";
 
 const MainContainer = () => {
   const [track, setTrack] = useState(null);
@@ -14,6 +16,7 @@ const MainContainer = () => {
   const [currentImage, setCurrentImage] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
 
@@ -84,6 +87,7 @@ const MainContainer = () => {
       } else {
         audioRef.current.src = track.preview_url;
         audioRef.current.play();
+        setIsFullScreen(false);
       }
       setIsPlaying(!isPlaying);
     }
@@ -102,19 +106,40 @@ const MainContainer = () => {
           {isPlaying ? <div>停止</div> : <div>再生</div>}
         </h1>
       </div>
-      <AnimatePresence>
-        {currentImage && (
-          <motion.img
-            key={currentImage}
-            style={{ width: "500px", height: "400px" }}
-            src={currentImage}
-            initial={{ x: 0, y: -200, scale: 0 }}
-            animate={{ x: 0, y: 0, scale: 1 }}
-            transition={{ duration: 0.6, type: "spring", bounce: 0.8 }}
-          />
-        )}
-      </AnimatePresence>
+
       <audio ref={audioRef} />
+      <ReactFullscreen>
+        {({ ref, onRequest }) => (
+          <div ref={ref} style={{ width: "100%", height: "100%" }}>
+            {!isFullScreen && (
+              <div>
+                <Button
+                  variant="outlined"
+                  onClick={() => onRequest(setIsFullScreen(true))}
+                >
+                  FullScreen
+                </Button>
+              </div>
+            )}
+            <AnimatePresence>
+              {currentImage && (
+                <motion.img
+                  key={currentImage}
+                  style={
+                    isFullScreen
+                      ? { width: "100%", height: "100%" }
+                      : { width: "500px", height: "500px" }
+                  }
+                  src={currentImage}
+                  initial={{ x: 0, y: -200, scale: 0 }}
+                  animate={{ x: 0, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, type: "spring", bounce: 0.8 }}
+                />
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+      </ReactFullscreen>
     </div>
   );
 };

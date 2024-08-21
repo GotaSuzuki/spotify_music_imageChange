@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import supabase from "../lib/supabase";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userIdState } from "../atoms/useIdState";
