@@ -7,9 +7,11 @@ import { SortableItem } from "./SortableItem";
 import CloseIcon from "@mui/icons-material/Close";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { imagesState } from "../atoms/imagesState";
+import { imagesState, recoilImagesLengthSelector } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { userIdState } from "../atoms/useIdState";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import InputFileUpload from "./FileButton";
 
 const Images = () => {
   const originalTimes = [
@@ -20,14 +22,15 @@ const Images = () => {
 
   const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
   const userId = useRecoilValue(userIdState);
+  const recoilImagesLength = useRecoilValue(recoilImagesLengthSelector);
 
   const { getImages } = useCommon();
 
   useEffect(() => {
-    if (recoilImages.length === 0) {
+    if (recoilImagesLength === 0) {
       getImages();
     }
-  }, [recoilImages]);
+  }, []);
 
   const saveMedia = () => {
     const newImages = recoilImages.map((image, index) => {
@@ -53,31 +56,34 @@ const Images = () => {
     </IconButton>
   );
 
-  const uploadImage = async (e) => {
-    let file = e.target.files[0];
-    const fileName = userId + file.name;
+  const uploadImage = async (file) => {
+    try {
+      const fileName = userId + file.name;
 
-    const { data: existingFile, error: duplicateError } = await supabase.storage
-      .from("images")
-      .list("", {
-        limit: 1,
-        offset: 0,
-        search: fileName,
-      });
+      const { data: existingFile, error: duplicateError } =
+        await supabase.storage.from("images").list("", {
+          limit: 1,
+          offset: 0,
+          search: fileName,
+        });
 
-    if (existingFile && existingFile.length > 0) {
-      alert("同じファイル名で登録することは出来ません");
-      return;
-    }
+      if (existingFile && existingFile.length > 0) {
+        alert("同じファイル名で登録することは出来ません");
+        return;
+      }
 
-    const { data, error } = await supabase.storage
-      .from("images")
-      .upload(userId + file.name, file);
+      const { data, error } = await supabase.storage
+        .from("images")
+        .upload(fileName, file);
 
-    if (error) {
+      if (error) {
+        throw error;
+      }
+
+      await getImages(); // アップロード後に画像リストを更新
+    } catch (error) {
       console.error("Error uploading image:", error);
-    } else {
-      getImages(); // アップロード後に画像リストを更新
+      alert("画像のアップロードに失敗しました。");
     }
   };
 
@@ -87,18 +93,17 @@ const Images = () => {
         <SnackbarProvider />
       </div>
       <div>
-        {recoilImages.length < MAX_IMAGES_LENGTH && (
+        {recoilImagesLength < MAX_IMAGES_LENGTH && (
           <div>
             残りの画像保存枚数：
             <span style={{ color: "red" }}>
-              {MAX_IMAGES_LENGTH - recoilImages.length}
+              {MAX_IMAGES_LENGTH - recoilImagesLength}
             </span>
           </div>
         )}
       </div>
-      <div className="mt-5">
-        <input type="file" onChange={(e) => uploadImage(e)} />
-      </div>
+
+      <InputFileUpload uploadImage={uploadImage} />
       <div>
         <Box sx={{ padding: 1 }}>
           <Box sx={{ p: 2, border: "2px solid black", overflowX: "auto" }}>
