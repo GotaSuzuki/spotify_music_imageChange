@@ -13,7 +13,7 @@ import Paper from "@mui/material/Paper";
 import { Button, IconButton } from "@mui/material";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import CloseIcon from "@mui/icons-material/Close";
-import { imagesState } from "../atoms/imagesState";
+import { imagesLengthSelector, imagesState } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 
 const ImagesList = () => {
@@ -23,6 +23,7 @@ const ImagesList = () => {
   ];
 
   const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
+  const recoilImagesLength = useRecoilValue(imagesLengthSelector);
   const userId = useRecoilValue(userIdState);
 
   const { getImages } = useCommon();
@@ -108,7 +109,10 @@ const ImagesList = () => {
       <div style={{ marginTop: "40px" }}>
         <SnackbarProvider />
       </div>
-      <div style={{ marginTop: "100px" }}>
+      <div style={{ margin: "50px" }}>
+        <h2>保存している画像数：{recoilImagesLength}枚</h2>
+      </div>
+      <div style={{ marginTop: "50px" }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="images table">
             <TableHead>
