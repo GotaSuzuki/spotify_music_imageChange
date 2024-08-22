@@ -13,57 +13,21 @@ import Paper from "@mui/material/Paper";
 import { Button, IconButton } from "@mui/material";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import CloseIcon from "@mui/icons-material/Close";
-import { imagesState } from "../atoms/imagesState";
+import { imagesLengthSelector, imagesState } from "../atoms/imagesState";
+import useCommon from "../hooks/useCommon";
 
 const ImagesList = () => {
-  const originalTimes = [
-    0, 2.5, 4.4, 6.2, 8, 9.8, 11.7, 13.6, 15.5, 17.3, 19.1, 21, 22.8, 24.6,
-    26.4, 28.2, 30,
-  ];
-
-  const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
+  const recoilImages = useRecoilValue(imagesState);
+  const recoilImagesLength = useRecoilValue(imagesLengthSelector);
   const userId = useRecoilValue(userIdState);
 
+  const { getImages, getAllImages } = useCommon();
+
   useEffect(() => {
-    getAllImages();
-  }, [recoilImages]);
-
-  const getAllImages = async () => {
-    const { data, error } = await supabase.storage.from("images").list("", {
-      offset: 0,
-      sortBy: { column: "last_accessed_at", order: "desc" },
-    });
-
-    if (error) {
-      console.error("Error fetching media:", error);
-      return;
+    if (recoilImagesLength === 0) {
+      getAllImages();
     }
-
-    // 各ファイルのpublicUrlを生成
-    const imagesWithUrls = data
-      .filter((image) => image.name.startsWith(userId))
-      .map((image, index) => {
-        const start = originalTimes[index];
-        const end = originalTimes[index + 1];
-        const {
-          data: { publicUrl },
-        } = supabase.storage.from("images").getPublicUrl(image.name);
-        return { ...image, publicUrl, start, end };
-      });
-
-    // 画像名からuserIdを消去
-    // 画像名が重複していたら画像のアップロードが出来ないため
-    // また、UserIdを表示させないため
-    const cutImagesName = imagesWithUrls.map((image) => {
-      const newImageName = {
-        ...image,
-        name: image.name.replace(userId, ""),
-      };
-      return newImageName;
-    });
-
-    setRecoilImages(cutImagesName);
-  };
+  }, []);
 
   const handleDelete = async (name) => {
     const { data, error } = await supabase.storage
@@ -76,6 +40,11 @@ const ImagesList = () => {
       return;
     }
 
+    // ImagesList.jsxのリストの更新のため
+    await getAllImages();
+    // Images.jsxのリストの更新のため
+    await getImages();
+
     enqueueSnackbar("削除しました", {
       variant: "success",
       autoHideDuration: 3000,
@@ -87,6 +56,7 @@ const ImagesList = () => {
     });
   };
 
+  // ポップアップ
   const action = (key) => (
     <IconButton
       aria-label="Close"
@@ -102,7 +72,10 @@ const ImagesList = () => {
       <div style={{ marginTop: "40px" }}>
         <SnackbarProvider />
       </div>
-      <div style={{ marginTop: "100px" }}>
+      <div style={{ margin: "50px" }}>
+        <h2>保存している画像数：{recoilImagesLength}枚</h2>
+      </div>
+      <div style={{ marginTop: "50px" }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="images table">
             <TableHead>
