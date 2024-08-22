@@ -7,10 +7,13 @@ import { SortableItem } from "./SortableItem";
 import CloseIcon from "@mui/icons-material/Close";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { imagesState, recoilImagesLengthSelector } from "../atoms/imagesState";
+import {
+  imagesOrderLengthSelector,
+  imagesOrderState,
+  imagesState,
+} from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { userIdState } from "../atoms/useIdState";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import InputFileUpload from "./FileButton";
 
 const Images = () => {
@@ -20,20 +23,22 @@ const Images = () => {
   ];
   const MAX_IMAGES_LENGTH = 16;
 
-  const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
+  const recoilImages = useRecoilValue(imagesState);
   const userId = useRecoilValue(userIdState);
-  const recoilImagesLength = useRecoilValue(recoilImagesLengthSelector);
+  const recoilImagesOrderLength = useRecoilValue(imagesOrderLengthSelector);
+  const [recoilImagesOrder, setRecoilImagesOrder] =
+    useRecoilState(imagesOrderState);
 
   const { getImages } = useCommon();
 
   useEffect(() => {
-    if (recoilImagesLength === 0) {
+    if (recoilImagesOrderLength === 0) {
       getImages();
     }
   }, []);
 
   const saveMedia = () => {
-    const newImages = recoilImages.map((image, index) => {
+    const newImages = recoilImagesOrder.map((image, index) => {
       const start = originalTimes[index];
       const end = originalTimes[index + 1];
       return {
@@ -43,7 +48,7 @@ const Images = () => {
       };
     });
 
-    setRecoilImages(newImages);
+    setRecoilImagesOrder(newImages);
   };
 
   const action = (key) => (
@@ -93,11 +98,11 @@ const Images = () => {
         <SnackbarProvider />
       </div>
       <div>
-        {recoilImagesLength < MAX_IMAGES_LENGTH && (
+        {recoilImagesOrderLength < MAX_IMAGES_LENGTH && (
           <div>
             残りの画像保存枚数：
             <span style={{ color: "red" }}>
-              {MAX_IMAGES_LENGTH - recoilImagesLength}
+              {MAX_IMAGES_LENGTH - recoilImagesOrderLength}
             </span>
           </div>
         )}
@@ -114,7 +119,7 @@ const Images = () => {
                   return;
                 }
                 if (active.id !== over.id) {
-                  setRecoilImages((media) => {
+                  setRecoilImagesOrder((media) => {
                     const oldIndex = media.findIndex(
                       (image) => image.id === active.id
                     );
@@ -126,9 +131,9 @@ const Images = () => {
                 }
               }}
             >
-              <SortableContext items={recoilImages}>
+              <SortableContext items={recoilImagesOrder}>
                 <Stack direction="row" spacing={2} sx={{ flexWrap: "nowrap" }}>
-                  {recoilImages.map((image) => (
+                  {recoilImagesOrder.map((image) => (
                     <SortableItem
                       id={image.id}
                       name={image.publicUrl}

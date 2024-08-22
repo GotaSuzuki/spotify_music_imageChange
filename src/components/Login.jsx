@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import supabase from "../lib/supabase";
-import { Button, FormHelperText, Input, InputLabel } from "@mui/material";
+import { Button, Input, InputLabel } from "@mui/material";
 import { FormControl } from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { userIdState } from "../atoms/useIdState";

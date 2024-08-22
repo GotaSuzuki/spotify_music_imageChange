@@ -1,5 +1,5 @@
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { imagesState } from "../atoms/imagesState";
+import { imagesOrderState, imagesState } from "../atoms/imagesState";
 import supabase from "../lib/supabase";
 import { userIdState } from "../atoms/useIdState";
 
@@ -9,7 +9,7 @@ const useCommon = () => {
     26.4, 28.2, 30,
   ];
 
-  const setRecoilImages = useSetRecoilState(imagesState);
+  const setRecoilImagesOrder = useSetRecoilState(imagesOrderState);
   const userId = useRecoilValue(userIdState);
 
   const getImages = async () => {
@@ -37,7 +37,7 @@ const useCommon = () => {
         return { ...image, publicUrl, start, end };
       });
 
-    setRecoilImages(imagesWithUrls);
+    setRecoilImagesOrder(imagesWithUrls);
   };
 
   return { getImages };

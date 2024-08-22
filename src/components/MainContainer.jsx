@@ -3,9 +3,9 @@ import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import spotify from "../lib/spotify";
 import { useEffect } from "react";
-import { imagesState } from "../atoms/imagesState";
+import { imagesOrderState } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import ReactFullscreen from "react-easyfullscreen";
 import { Button } from "@mui/material";
 
@@ -18,13 +18,14 @@ const MainContainer = () => {
   const audioRef = useRef(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
+  const recoilImagesOrder = useRecoilValue(imagesOrderState);
 
   const { getImages } = useCommon();
 
+  // 初回に画像が保存されていないときに実行
   useEffect(() => {
     const fetchData = async () => {
-      if (recoilImages.length === 0) {
+      if (recoilImagesOrder.length === 0) {
         await getImages();
       }
     };
@@ -45,20 +46,21 @@ const MainContainer = () => {
     fetchTrack();
   }, []);
 
+  // 音楽の再生している秒数とrecoilImagesOrderに保存されている秒数が一致している画像のUrlをセット
   useEffect(() => {
     if (audioRef.current) {
       const audio = audioRef.current;
 
       const updateTime = () => {
         setCurrentTime(audio.currentTime);
-        //recoilImagesのtime(start,end)によってstateに格納
-        const currentImg = recoilImages.find(
+        //recoilImagesOrderのtime(start,end)によってstateに格納
+        const currentImg = recoilImagesOrder.find(
           (img) => audio.currentTime >= img.start && audio.currentTime < img.end
         );
         if (currentImg) {
-          setCurrentImage(currentImg.publicUrl);
+          setCurrentImage(currentImg.publicUrl); // 画像のUrlをセット
         } else {
-          setCurrentImage(recoilImages[0]); // どの画像も一致しない場合
+          setCurrentImage(recoilImagesOrder[0]); // どの画像も一致しない場合
         }
 
         if (audio.currentTime >= 30) {
@@ -77,7 +79,7 @@ const MainContainer = () => {
         );
       };
     }
-  }, [track, recoilImages]);
+  }, [track, recoilImagesOrder]);
 
   //再生と停止の制御
   const handlePlayClick = () => {
