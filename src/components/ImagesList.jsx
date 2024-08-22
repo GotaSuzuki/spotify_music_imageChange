@@ -14,6 +14,7 @@ import { Button, IconButton } from "@mui/material";
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
 import CloseIcon from "@mui/icons-material/Close";
 import { imagesState } from "../atoms/imagesState";
+import useCommon from "../hooks/useCommon";
 
 const ImagesList = () => {
   const originalTimes = [
@@ -24,9 +25,11 @@ const ImagesList = () => {
   const [recoilImages, setRecoilImages] = useRecoilState(imagesState);
   const userId = useRecoilValue(userIdState);
 
+  const { getImages } = useCommon();
+
   useEffect(() => {
     getAllImages();
-  }, [recoilImages]);
+  }, []);
 
   const getAllImages = async () => {
     const { data, error } = await supabase.storage.from("images").list("", {
@@ -75,6 +78,9 @@ const ImagesList = () => {
       enqueueSnackbar("削除に失敗しました", { variant: "error" });
       return;
     }
+
+    await getAllImages();
+    await getImages();
 
     enqueueSnackbar("削除しました", {
       variant: "success",

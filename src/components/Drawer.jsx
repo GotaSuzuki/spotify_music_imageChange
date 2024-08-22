@@ -11,13 +11,14 @@ import {
 } from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { userIdState } from "../atoms/useIdState";
-import { imagesState } from "../atoms/imagesState";
+import { imagesOrderState, imagesState } from "../atoms/imagesState";
 
 const Drawer = ({ open, setOpen, userName, setUserName, toggleDrawer }) => {
   const navigate = useNavigate();
 
   const setUserId = useSetRecoilState(userIdState);
   const setRecoilImages = useSetRecoilState(imagesState);
+  const setRecoilImagesOrder = useSetRecoilState(imagesOrderState);
 
   const updateUserName = async () => {
     const { data, error } = await supabase.auth.getUser();
@@ -60,6 +61,7 @@ const Drawer = ({ open, setOpen, userName, setUserName, toggleDrawer }) => {
       setUserName("");
       setUserId("");
       setRecoilImages([]);
+      setRecoilImagesOrder([]);
       if (error) throw error;
       alert("ログアウトしました");
       setOpen(false);

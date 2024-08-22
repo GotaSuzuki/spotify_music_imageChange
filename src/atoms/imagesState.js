@@ -5,10 +5,15 @@ export const imagesState = atom({
   default: [],
 });
 
-export const recoilImagesLengthSelector = selector({
-  key: "recoilImagesLengthSelector",
+export const imagesOrderState = atom({
+  key: "imagesOrderState",
+  default: [],
+});
+
+export const imagesOrderLengthSelector = selector({
+  key: "imagesOrderLengthSelector",
   get: ({ get }) => {
-    const recoilImagesLength = get(imagesState);
+    const recoilImagesLength = get(imagesOrderState);
     return recoilImagesLength.length;
   },
 });
