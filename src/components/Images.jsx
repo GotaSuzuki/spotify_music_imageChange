@@ -10,7 +10,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import {
   imagesOrderLengthSelector,
   imagesOrderState,
-  imagesState,
 } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { userIdState } from "../atoms/useIdState";
@@ -23,13 +22,12 @@ const Images = () => {
   ];
   const MAX_IMAGES_LENGTH = 16;
 
-  const recoilImages = useRecoilValue(imagesState);
   const userId = useRecoilValue(userIdState);
   const recoilImagesOrderLength = useRecoilValue(imagesOrderLengthSelector);
   const [recoilImagesOrder, setRecoilImagesOrder] =
     useRecoilState(imagesOrderState);
 
-  const { getImages } = useCommon();
+  const { getImages, getAllImages } = useCommon();
 
   useEffect(() => {
     if (recoilImagesOrderLength === 0) {
@@ -85,7 +83,10 @@ const Images = () => {
         throw error;
       }
 
-      await getImages(); // アップロード後に画像リストを更新
+      //  Images.jsxのリストを更新するため
+      await getImages();
+      // ImagesList.jsxのリストを更新するため
+      await getAllImages();
     } catch (error) {
       console.error("Error uploading image:", error);
       alert("画像のアップロードに失敗しました。");

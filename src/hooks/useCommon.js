@@ -10,6 +10,7 @@ const useCommon = () => {
   ];
 
   const setRecoilImagesOrder = useSetRecoilState(imagesOrderState);
+  const setRecoilImages = useSetRecoilState(imagesState);
   const userId = useRecoilValue(userIdState);
 
   const getImages = async () => {
@@ -40,7 +41,44 @@ const useCommon = () => {
     setRecoilImagesOrder(imagesWithUrls);
   };
 
-  return { getImages };
+  const getAllImages = async () => {
+    const { data, error } = await supabase.storage.from("images").list("", {
+      offset: 0,
+      sortBy: { column: "last_accessed_at", order: "desc" },
+    });
+
+    if (error) {
+      console.error("Error fetching media:", error);
+      return;
+    }
+
+    // 各ファイルのpublicUrlを生成
+    const imagesWithUrls = data
+      .filter((image) => image.name.startsWith(userId))
+      .map((image, index) => {
+        const start = originalTimes[index];
+        const end = originalTimes[index + 1];
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("images").getPublicUrl(image.name);
+        return { ...image, publicUrl, start, end };
+      });
+
+    // 画像名からuserIdを消去
+    // 画像名が重複していたら画像のアップロードが出来ないため
+    // また、UserIdを表示させないため
+    const cutImagesName = imagesWithUrls.map((image) => {
+      const newImageName = {
+        ...image,
+        name: image.name.replace(userId, ""),
+      };
+      return newImageName;
+    });
+
+    setRecoilImages(cutImagesName);
+  };
+
+  return { getImages, getAllImages };
 };
 
 export default useCommon;
