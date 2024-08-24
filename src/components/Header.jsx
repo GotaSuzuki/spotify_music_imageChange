@@ -13,7 +13,7 @@ const Header = ({ toggleDrawer }) => {
         left: 0,
         width: "100%",
         zIndex: 1000,
-        backgroundColor: "gray",
+        background: "linear-gradient(to right, aquamarine, pink)",
       }}
     >
       <nav>
