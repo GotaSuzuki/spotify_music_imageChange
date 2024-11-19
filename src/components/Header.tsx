@@ -3,8 +3,11 @@ import { Button } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
-// eslint-disable-next-line react/prop-types
-const Header = ({ toggleDrawer }) => {
+interface HeaderProps {
+  toggleDrawer: (open: boolean) => () => void;
+}
+
+const Header = ({ toggleDrawer }: HeaderProps) => {
   return (
     <div
       style={{

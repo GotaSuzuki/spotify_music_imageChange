@@ -4,8 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Button, FormControl, Input, InputLabel } from "@mui/material";
 import React from "react";
 
-// eslint-disable-next-line react/prop-types
-const SignUp = ({ setUserName }) => {
+interface SignUpProps {
+  setUserName: (name: string) => void;
+}
+
+const SignUp = ({ setUserName }: SignUpProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConf, setPasswordConf] = useState("");
@@ -13,7 +16,7 @@ const SignUp = ({ setUserName }) => {
   const [lastName, setLastName] = useState("");
   const navigate = useNavigate();
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== passwordConf) {
       alert("パスワードが一致しません");

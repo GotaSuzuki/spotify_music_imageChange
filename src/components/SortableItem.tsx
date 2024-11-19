@@ -3,7 +3,12 @@ import { CSS } from "@dnd-kit/utilities";
 import { Box } from "@mui/material";
 import React from "react";
 
-export const SortableItem = ({ id, name }) => {
+interface SortableItemProps {
+  id: string;
+  name: string;
+}
+
+export const SortableItem = ({ id, name }: SortableItemProps) => {
   const {
     setNodeRef,
     attributes,

@@ -37,27 +37,17 @@ const Images = () => {
   }, []);
 
   const saveMedia = () => {
-    const newImages: {
-      start: number;
-      end: number;
-      id: number;
-      publicUrl: string;
-    }[] = recoilImagesOrder.map(
-      (
-        image: { start: number; end: number; id: number; publicUrl: string },
-        index
-      ) => {
-        const start = originalTimes[index];
-        const end = originalTimes[index + 1];
-        return {
-          ...image,
-          start,
-          end,
-          id: image.id,
-          publicUrl: image.publicUrl
-        };
-      }
-    );
+    const newImages = recoilImagesOrder.map((image, index) => {
+      const start = originalTimes[index];
+      const end = originalTimes[index + 1];
+      return {
+        ...image,
+        start,
+        end,
+        id: image.id,
+        publicUrl: image.publicUrl
+      };
+    });
 
     setRecoilImagesOrder(newImages);
   };
@@ -125,7 +115,15 @@ const Images = () => {
       <InputFileUpload uploadImage={uploadImage} />
       <div>
         <Box sx={{ padding: 1 }}>
-          <Box sx={{ p: 2, border: "2px solid black", overflowX: "auto" }}>
+          <Box
+            sx={{
+              p: 2,
+              border: "2px solid black",
+              overflowX: "auto",
+              width: "fit-content",
+              maxWidth: "100%",
+              display: "inline-block"
+            }}>
             <DndContext
               onDragEnd={(event) => {
                 const { active, over } = event;

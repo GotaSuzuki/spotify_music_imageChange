@@ -69,52 +69,75 @@ const ImagesList = () => {
 
   return (
     <>
-      <div style={{ marginTop: "40px" }}>
-        <SnackbarProvider />
-      </div>
-      <div style={{ margin: "50px" }}>
-        <h2>保存している画像数：{recoilImagesLength}枚</h2>
-      </div>
-      <div style={{ marginTop: "50px" }}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="images table">
-            <TableHead>
-              <TableRow>
-                <TableCell>画像名</TableCell>
-                <TableCell align="center">画像</TableCell>
-                <TableCell align="right">削除ボタン</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {recoilImages.map(
-                (image: { name: string; publicUrl: string }) => (
-                  <TableRow
-                    key={image.name}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    <TableCell component="th" scope="row">
-                      {image.name}
-                    </TableCell>
-                    <TableCell align="center">
-                      <img
-                        src={image.publicUrl}
-                        alt={image.name}
-                        style={{ height: "50px", width: "50px" }}
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() => handleDelete(image.name)}>
-                        削除
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh", // 画面の高さいっぱいに
+          padding: "20px" // 全体の余白
+        }}>
+        <div style={{ marginTop: "20px" }}>
+          <SnackbarProvider />
+        </div>
+        <div>
+          <h2>保存している画像数：{recoilImagesLength}枚</h2>
+        </div>
+        <div
+          style={{
+            flex: 1, // 残りのスペースを占有
+            overflow: "hidden", // はみ出しを隠す
+            minHeight: 0 // Flexboxでの縮小を許可
+          }}>
+          <TableContainer
+            component={Paper}
+            sx={{
+              maxHeight: "100%",
+              overflow: "auto"
+            }}>
+            <Table
+              sx={{ minWidth: 650 }}
+              size="small"
+              aria-label="images table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>画像名</TableCell>
+                  <TableCell align="center">画像</TableCell>
+                  <TableCell align="right">削除ボタン</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {recoilImages.map(
+                  (image: { name: string; publicUrl: string }) => (
+                    <TableRow
+                      key={image.name}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 }
+                      }}>
+                      <TableCell component="th" scope="row">
+                        {image.name}
+                      </TableCell>
+                      <TableCell align="center">
+                        <img
+                          src={image.publicUrl}
+                          alt={image.name}
+                          style={{ height: "50px", width: "50px" }}
+                        />
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleDelete(image.name)}>
+                          削除
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </>
   );
