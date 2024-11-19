@@ -1,18 +1,12 @@
 import { atom, selector } from "recoil";
+import { RecoilImagesOrder, RecoilCutImages } from "../types/index";
 
-type ImageTimestamp = {
-  start: number;
-  end: number;
-  id: number;
-  publicUrl: string;
-};
-
-export const imagesState = atom({
+export const imagesState = atom<RecoilCutImages[]>({
   key: "imagesState",
   default: []
 });
 
-export const imagesOrderState = atom<ImageTimestamp[]>({
+export const imagesOrderState = atom<RecoilImagesOrder[]>({
   key: "imagesOrderState",
   default: []
 });
