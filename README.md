@@ -44,13 +44,13 @@ lib/supabase.js に利用の認証を記載
 　　※Images.jsx では 16 枚の画像のみを最近保存された順番に取得(音楽に合わせて 16 枚)  
 　　※ImagesList.jsx ではユーザーが保存している画像全てを取得
 
-# branchの運用規則について
+# branch の運用規則について
 
-masterブランチはリリース可能な状態だけを管理する
-developブランチは統合ブランチとする
- developブランチでの開発、修正を禁止する
-featureブランチで機能開発やバグ修正を行う
- (例)feature/modify
+master ブランチはリリース可能な状態だけを管理する
+develop ブランチは統合ブランチとする
+develop ブランチでの開発、修正を禁止する
+feature ブランチで機能開発やバグ修正を行う
+(例)feature/modify
 
 # コミットメッセージの規則について
 
@@ -62,4 +62,4 @@ remove:削除（ファイル）
 hotfix:クリティカルなバグ修正
 clean:整理（リファクタリング等）
 
-(例) add: Home.tsxを追加
+(例) add: Home.tsx を追加
