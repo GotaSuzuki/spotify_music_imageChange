@@ -14,7 +14,21 @@ import { userIdState } from "../atoms/useIdState";
 import { imagesOrderState, imagesState } from "../atoms/imagesState";
 import React from "react";
 
-const Drawer = ({ open, setOpen, userName, setUserName, toggleDrawer }) => {
+interface DrawerProps {
+  userName: string;
+  setUserName: (name: string) => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  toggleDrawer: (open: boolean) => () => void;
+}
+
+const CustomDrawer: React.FC<DrawerProps> = ({
+  open,
+  setOpen,
+  userName,
+  setUserName,
+  toggleDrawer
+}: DrawerProps) => {
   const navigate = useNavigate();
 
   const setUserId = useSetRecoilState(userIdState);
@@ -101,4 +115,4 @@ const Drawer = ({ open, setOpen, userName, setUserName, toggleDrawer }) => {
   );
 };
 
-export default Drawer;
+export default CustomDrawer;
