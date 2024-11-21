@@ -73,3 +73,25 @@ export interface DrawerProps {
   setUserName: (name: string) => void;
   toggleDrawer: (open: boolean) => () => void;
 }
+
+export interface UpdateUserProps {
+  setUserName: (name: string) => void;
+  setUserId: (id: string) => void;
+}
+
+export interface handleItemClickParams {
+  text: string;
+  navigate: NavigateFunction;
+  setOpen: (open: boolean) => void;
+  toggleDrawer: (open: boolean) => () => void;
+  setUserId: (id: string | undefined) => void;
+  setUserName: (name: string) => void;
+  setRecoilImages: (images: RecoilImagesOrder[]) => void;
+  setRecoilImagesOrder: (images: RecoilImagesOrder[]) => void;
+  logout: (params: LogoutParams) => Promise<void>;
+}
+
+export interface AppLayoutProps {
+  userName: string;
+  setUserName: (name: string) => void;
+}

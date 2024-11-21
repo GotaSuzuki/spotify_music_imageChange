@@ -11,11 +11,7 @@ import {
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import CustomDrawer from "../CustomDrawer";
-
-interface AppLayoutProps {
-  userName: string;
-  setUserName: (name: string) => void;
-}
+import { AppLayoutProps } from "../../types";
 
 // スタイル付きのLinkコンポーネント
 const StyledLink = styled(Link)({
