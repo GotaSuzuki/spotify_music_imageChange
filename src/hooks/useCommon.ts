@@ -2,7 +2,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { imagesOrderState, imagesState } from "../atoms/imagesState";
 import supabase from "../lib/supabase";
 import { userIdState } from "../atoms/useIdState";
-import { RecoilImagesOrder } from "../types/index";
+import { handleItemClickParams, RecoilImagesOrder } from "../types/index";
 import { RecoilCutImages } from "../types/index";
 
 const useCommon = () => {
@@ -80,7 +80,41 @@ const useCommon = () => {
     setRecoilImages(cutImagesName);
   };
 
-  return { getImages, getAllImages };
+  const handleItemClick = async ({
+    text,
+    navigate,
+    setOpen,
+    toggleDrawer,
+    setUserId,
+    setUserName,
+    setRecoilImages,
+    setRecoilImagesOrder,
+    logout
+  }: handleItemClickParams) => {
+    switch (text) {
+      case "登録":
+        navigate("/SignUp");
+        break;
+      case "ログイン":
+        navigate("/login");
+        break;
+      case "ログアウト":
+        await logout({
+          setUserName,
+          setUserId,
+          setRecoilImages,
+          setRecoilImagesOrder,
+          setOpen,
+          navigate
+        });
+        break;
+      default:
+        toggleDrawer(false)();
+    }
+    setOpen(false);
+  };
+
+  return { getImages, getAllImages, handleItemClick };
 };
 
 export default useCommon;

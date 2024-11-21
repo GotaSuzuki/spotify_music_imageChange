@@ -4,7 +4,8 @@ import {
   UploadImageParams,
   DeleteImageParams,
   SignUpParams,
-  LogoutParams
+  LogoutParams,
+  UpdateUserProps
 } from "../types/index";
 
 const useSupabase = () => {
@@ -177,7 +178,31 @@ const useSupabase = () => {
     }
   };
 
-  return { loginUser, uploadImage, deleteImage, signUp, logout };
+  const updateUserName = async ({
+    setUserName,
+    setUserId
+  }: UpdateUserProps) => {
+    const { data } = await supabase.auth.getUser();
+    if (data && data.user && data.user.user_metadata) {
+      const displayName =
+        data.user.user_metadata.display_name ||
+        `${data.user.user_metadata.last_name} ${data.user.user_metadata.first_name}`.trim();
+      setUserName(displayName);
+      setUserId(data.user.id);
+    } else {
+      setUserName("");
+      setUserId("");
+    }
+  };
+
+  return {
+    loginUser,
+    uploadImage,
+    deleteImage,
+    signUp,
+    logout,
+    updateUserName
+  };
 };
 
 export default useSupabase;

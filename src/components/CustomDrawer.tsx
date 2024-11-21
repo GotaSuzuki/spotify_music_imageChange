@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import supabase from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -16,6 +15,7 @@ import { imagesOrderState, imagesState } from "../atoms/imagesState";
 import React from "react";
 import useSupabase from "../hooks/useSupabase";
 import { DrawerProps } from "../types";
+import useCommon from "../hooks/useCommon";
 
 const CustomDrawer: React.FC<DrawerProps> = ({
   open,
@@ -29,49 +29,15 @@ const CustomDrawer: React.FC<DrawerProps> = ({
   const setRecoilImages = useSetRecoilState(imagesState);
   const setRecoilImagesOrder = useSetRecoilState(imagesOrderState);
 
-  const { logout } = useSupabase();
-
-  const updateUserName = async () => {
-    const { data } = await supabase.auth.getUser();
-    if (data && data.user && data.user.user_metadata) {
-      const displayName =
-        data.user.user_metadata.display_name ||
-        `${data.user.user_metadata.last_name} ${data.user.user_metadata.first_name}`.trim();
-      setUserName(displayName);
-      setUserId(data.user.id);
-    } else {
-      setUserName("");
-      setUserId("");
-    }
-  };
+  const { logout, updateUserName } = useSupabase();
+  const { handleItemClick } = useCommon();
 
   useEffect(() => {
-    updateUserName();
+    updateUserName({
+      setUserName,
+      setUserId
+    });
   }, []);
-
-  const handleItemClick = async (text) => {
-    switch (text) {
-      case "登録":
-        navigate("/SignUp");
-        break;
-      case "ログイン":
-        navigate("/login");
-        break;
-      case "ログアウト":
-        await logout({
-          setUserName,
-          setUserId,
-          setRecoilImages,
-          setRecoilImagesOrder,
-          setOpen,
-          navigate
-        });
-        break;
-      default:
-        toggleDrawer(false)();
-    }
-    setOpen(false);
-  };
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
@@ -79,7 +45,19 @@ const CustomDrawer: React.FC<DrawerProps> = ({
         {["登録", "ログイン", "ログアウト"].map((text) => (
           <ListItem key={text} disablePadding>
             <ListItemButton
-              onClick={() => handleItemClick(text)}
+              onClick={() =>
+                handleItemClick({
+                  text,
+                  navigate,
+                  setOpen,
+                  toggleDrawer,
+                  setUserId,
+                  setUserName,
+                  setRecoilImages,
+                  setRecoilImagesOrder,
+                  logout
+                })
+              }
               disabled={
                 (userName && (text === "登録" || text === "ログイン")) ||
                 (!userName && text === "ログアウト")
