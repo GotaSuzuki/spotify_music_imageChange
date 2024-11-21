@@ -10,6 +10,7 @@ import {
   Typography
 } from "@mui/material";
 import React from "react";
+import useSupabase from "../hooks/useSupabase";
 
 interface SignUpProps {
   setUserName: (name: string) => void;
@@ -23,31 +24,21 @@ const SignUp = ({ setUserName }: SignUpProps) => {
   const [lastName, setLastName] = useState("");
   const navigate = useNavigate();
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const { signUp } = useSupabase();
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (password !== passwordConf) {
-      alert("パスワードが一致しません");
-      return;
-    }
-    try {
-      const { error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: {
-            first_name: firstName,
-            last_name: lastName,
-            display_name: `${lastName} ${firstName}`.trim()
-          }
-        }
-      });
-      if (error) throw error;
-      setUserName(`${lastName} ${firstName}`.trim());
-      alert("登録しました");
-      navigate("/");
-    } catch (error) {
-      alert("エラーが発生しました: " + error.message);
-    }
+    await signUp({
+      e,
+      email,
+      password,
+      passwordConf,
+      firstName,
+      lastName,
+      setUserName,
+      navigate
+    });
+    navigate("/");
   };
 
   return (

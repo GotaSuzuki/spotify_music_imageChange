@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { imagesLengthSelector, imagesState } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import React from "react";
+import useSupabase from "../hooks/useSupabase";
 
 const ImagesList = () => {
   const recoilImages = useRecoilValue(imagesState);
@@ -23,39 +24,13 @@ const ImagesList = () => {
   const userId = useRecoilValue(userIdState);
 
   const { getImages, getAllImages } = useCommon();
+  const { deleteImage } = useSupabase();
 
   useEffect(() => {
     if (recoilImagesLength === 0) {
       getAllImages();
     }
   }, [recoilImagesLength, getAllImages]);
-
-  const handleDelete = async (name) => {
-    const { error } = await supabase.storage
-      .from("images")
-      .remove([userId + name]);
-
-    if (error) {
-      console.error("Error");
-      enqueueSnackbar("削除に失敗しました", { variant: "error" });
-      return;
-    }
-
-    // ImagesList.jsxのリストの更新のため
-    await getAllImages();
-    // Images.jsxのリストの更新のため
-    await getImages();
-
-    enqueueSnackbar("削除しました", {
-      variant: "success",
-      autoHideDuration: 3000,
-      anchorOrigin: {
-        vertical: "top",
-        horizontal: "center"
-      },
-      action
-    });
-  };
 
   // ポップアップ
   const action = (key) => (
@@ -121,7 +96,16 @@ const ImagesList = () => {
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={() => handleDelete(image.name)}>
+                        onClick={() =>
+                          deleteImage({
+                            image,
+                            userId,
+                            getImages,
+                            getAllImages,
+                            enqueueSnackbar,
+                            action
+                          })
+                        }>
                         削除
                       </Button>
                     </TableCell>

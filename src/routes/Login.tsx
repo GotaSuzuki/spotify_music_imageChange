@@ -1,43 +1,30 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import supabase from "../lib/supabase";
 import { Box, Button, Input, InputLabel, Typography } from "@mui/material";
 import { FormControl } from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { userIdState } from "../atoms/useIdState";
 import React from "react";
+import useSupabase from "../hooks/useSupabase";
 
 const Login = ({ setUserName }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConf, setPasswordConf] = useState("");
   const navigate = useNavigate();
-
   const setUserId = useSetRecoilState(userIdState);
+
+  const { loginUser } = useSupabase();
 
   const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const { data } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
-      const {
-        data: { user }
-      } = await supabase.auth.getUser();
-      setUserId(user?.id);
-
-      const displayName =
-        data.user?.user_metadata.display_name ||
-        `${data.user?.user_metadata.last_name} ${data.user?.user_metadata.first_name}`.trim();
-      setUserName(displayName);
-
-      alert("ログインしました");
-      navigate("/");
-    } catch {
-      alert("エラーが発生しました");
-    }
+    await loginUser({
+      email,
+      password,
+      setUserId,
+      setUserName,
+      navigate
+    });
   };
 
   return (

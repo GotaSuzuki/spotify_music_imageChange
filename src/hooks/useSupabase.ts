@@ -1,0 +1,161 @@
+import supabase from "../lib/supabase";
+import {
+  LoginParams,
+  UploadImageParams,
+  DeleteImageParams,
+  SignUpParams
+} from "../types/index";
+
+
+
+const useSupabase = () => {
+  const loginUser = async ({
+    email,
+    password,
+    setUserId,
+    setUserName,
+    navigate
+  }: LoginParams) => {
+    try {
+      const { data } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      setUserId(user?.id);
+
+      const displayName =
+        data.user?.user_metadata.display_name ||
+        `${data.user?.user_metadata.last_name} ${data.user?.user_metadata.first_name}`.trim();
+      setUserName(displayName);
+
+      alert("ログインしました");
+      navigate("/");
+    } catch {
+      alert("エラーが発生しました");
+    }
+  };
+
+  const uploadImage = async ({
+    file,
+    userId,
+    getImages,
+    getAllImages,
+    enqueueSnackbar
+  }: UploadImageParams) => {
+    try {
+      const fileName = userId + file.name;
+
+      const { data: existingFile } = await supabase.storage
+        .from("images")
+        .list("", {
+          limit: 1,
+          offset: 0,
+          search: fileName
+        });
+
+      if (existingFile && existingFile.length > 0) {
+        enqueueSnackbar("同じファイル名で登録することは出来ません", {
+          variant: "error"
+        });
+        return;
+      }
+
+      const { error } = await supabase.storage
+        .from("images")
+        .upload(fileName, file);
+
+      if (error) {
+        throw error;
+      }
+
+      await getImages();
+      await getAllImages();
+      enqueueSnackbar("画像のアップロードに成功しました！", {
+        variant: "success"
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      enqueueSnackbar("画像のアップロードに失敗しました。", {
+        variant: "error"
+      });
+    }
+  };
+
+  const deleteImage = async ({
+    image: { name },
+    userId,
+    getImages,
+    getAllImages,
+    enqueueSnackbar,
+    action
+  }: DeleteImageParams) => {
+    const { error } = await supabase.storage
+      .from("images")
+      .remove([userId + name]);
+
+    if (error) {
+      console.error("Error");
+      enqueueSnackbar("削除に失敗しました", { variant: "error" });
+      return;
+    }
+
+    // ImagesList.jsxのリストの更新のため
+    await getAllImages();
+    // Images.jsxのリストの更新のため
+    await getImages();
+
+    enqueueSnackbar("削除しました", {
+      variant: "success",
+      autoHideDuration: 3000,
+      anchorOrigin: {
+        vertical: "top",
+        horizontal: "center"
+      },
+      action
+    });
+  };
+
+  const signUp = async ({
+    e,
+    email,
+    password,
+    passwordConf,
+    firstName,
+    lastName,
+    setUserName,
+    navigate
+  }) => {
+    e.preventDefault();
+    if (password !== passwordConf) {
+      alert("パスワードが一致しません");
+      return;
+    }
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+            display_name: `${lastName} ${firstName}`.trim()
+          }
+        }
+      });
+      if (error) throw error;
+      setUserName(`${lastName} ${firstName}`.trim());
+      alert("登録しました");
+      navigate("/");
+    } catch (error) {
+      alert("エラーが発生しました: " + error.message);
+    }
+  };
+
+  return { loginUser, uploadImage, deleteImage, signUp };
+};
+
+export default useSupabase;

@@ -15,6 +15,7 @@ import useCommon from "../hooks/useCommon";
 import { userIdState } from "../atoms/useIdState";
 import InputFileUpload from "../components/FileButton";
 import React from "react";
+import useSupabase from "../hooks/useSupabase";
 
 const Images = () => {
   const originalTimes = [
@@ -61,44 +62,15 @@ const Images = () => {
     </IconButton>
   );
 
-  const uploadImage = async (file) => {
-    try {
-      const fileName = userId + file.name;
-
-      const { data: existingFile } = await supabase.storage
-        .from("images")
-        .list("", {
-          limit: 1,
-          offset: 0,
-          search: fileName
-        });
-
-      if (existingFile && existingFile.length > 0) {
-        enqueueSnackbar("同じファイル名で登録することは出来ません", {
-          variant: "error"
-        });
-        return;
-      }
-
-      const { error } = await supabase.storage
-        .from("images")
-        .upload(fileName, file);
-
-      if (error) {
-        throw error;
-      }
-
-      await getImages();
-      await getAllImages();
-      enqueueSnackbar("画像のアップロードに成功しました！", {
-        variant: "success"
-      });
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      enqueueSnackbar("画像のアップロードに失敗しました。", {
-        variant: "error"
-      });
-    }
+  const { uploadImage } = useSupabase();
+  const wrappedUploadImage = async (file: File) => {
+    await uploadImage({
+      file,
+      userId,
+      getImages,
+      getAllImages,
+      enqueueSnackbar
+    });
   };
 
   return (
@@ -115,7 +87,7 @@ const Images = () => {
         )}
       </Box>
 
-      <InputFileUpload uploadImage={uploadImage} />
+      <InputFileUpload uploadImage={wrappedUploadImage} />
 
       <Box mt={2} sx={{ p: 2, border: "2px solid black", overflowX: "auto" }}>
         <DndContext
