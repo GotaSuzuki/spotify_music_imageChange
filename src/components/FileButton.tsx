@@ -1,6 +1,11 @@
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import React from "react";
+
+interface FileButtonProps {
+  uploadImage: (file: File) => Promise<void>;
+}
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -11,15 +16,15 @@ const VisuallyHiddenInput = styled("input")({
   bottom: 0,
   left: 0,
   whiteSpace: "nowrap",
-  width: 1,
+  width: 1
 });
 
-export default function InputFileUpload({ uploadImage }) {
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      await uploadImage(file);
-    }
+export default function InputFileUpload({ uploadImage }: FileButtonProps) {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) await uploadImage(file);
   };
 
   return (
@@ -28,8 +33,7 @@ export default function InputFileUpload({ uploadImage }) {
       role={undefined}
       variant="contained"
       tabIndex={-1}
-      startIcon={<CloudUploadIcon />}
-    >
+      startIcon={<CloudUploadIcon />}>
       Upload file
       <VisuallyHiddenInput type="file" onChange={handleFileChange} />
     </Button>

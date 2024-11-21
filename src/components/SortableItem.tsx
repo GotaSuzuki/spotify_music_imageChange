@@ -1,28 +1,35 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Box } from "@mui/material";
+import React from "react";
 
-export const SortableItem = ({ id, name }) => {
+interface SortableItemProps {
+  id: string;
+  name: string;
+}
+
+export const SortableItem = ({ id, name }: SortableItemProps) => {
   const {
     setNodeRef,
     attributes,
     listeners,
     transform,
     transition,
-    isDragging,
+    isDragging
   } = useSortable({
-    id,
+    id
   });
+
   return (
-    <div
+    <Box
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      style={{
+      sx={{
         transform: CSS.Transform.toString(transform),
         transition,
-      }}
-    >
+        display: "inline-block"
+      }}>
       <Box
         sx={{
           border: "1px solid black",
@@ -31,22 +38,20 @@ export const SortableItem = ({ id, name }) => {
           alignItems: "center",
           bgcolor: "white",
           cursor: isDragging ? "grabbing" : "grab",
-          width: "30px",
-          height: "30px",
-          overflow: "hidden",
-          padding: 1,
-        }}
-      >
+          width: 30,
+          height: 30,
+          overflow: "hidden"
+        }}>
         <img
           src={name}
           alt="Sortable item"
           style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover", // 画像がBoxを埋めるようにする
+            objectFit: "cover" // 画像がBoxを埋めるようにする
           }}
         />
       </Box>
-    </div>
+    </Box>
   );
 };

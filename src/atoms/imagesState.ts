@@ -1,13 +1,14 @@
 import { atom, selector } from "recoil";
+import { RecoilImagesOrder, RecoilCutImages } from "../types/index";
 
-export const imagesState = atom({
+export const imagesState = atom<RecoilCutImages[]>({
   key: "imagesState",
-  default: [],
+  default: []
 });
 
-export const imagesOrderState = atom({
+export const imagesOrderState = atom<RecoilImagesOrder[]>({
   key: "imagesOrderState",
-  default: [],
+  default: []
 });
 
 export const imagesOrderLengthSelector = selector({
@@ -15,7 +16,7 @@ export const imagesOrderLengthSelector = selector({
   get: ({ get }) => {
     const recoilOrderImagesLength = get(imagesOrderState);
     return recoilOrderImagesLength.length;
-  },
+  }
 });
 
 export const imagesLengthSelector = selector({
@@ -23,5 +24,5 @@ export const imagesLengthSelector = selector({
   get: ({ get }) => {
     const recoilImagesLength = get(imagesState);
     return recoilImagesLength.length;
-  },
+  }
 });
