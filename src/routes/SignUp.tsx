@@ -1,7 +1,14 @@
 import { useState } from "react";
 import supabase from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
-import { Button, FormControl, Input, InputLabel } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  TextField,
+  Typography
+} from "@mui/material";
 import React from "react";
 
 interface SignUpProps {
@@ -44,72 +51,86 @@ const SignUp = ({ setUserName }: SignUpProps) => {
   };
 
   return (
-    <>
-      <div>
-        <form onSubmit={onSubmit}>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <FormControl>
-              <InputLabel htmlFor="mail">メールアドレス</InputLabel>
-              <Input
-                id="mail"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <InputLabel htmlFor="password">パスワード</InputLabel>
-              <Input
-                id="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <InputLabel htmlFor="confirmPassword">
-                パスワード（確認）
-              </InputLabel>
-              <Input
-                id="confirmPassword"
-                type="password"
-                required
-                value={passwordConf}
-                onChange={(e) => setPasswordConf(e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <InputLabel htmlFor="lastName">姓</InputLabel>
-              <Input
-                id="lastName"
-                type="text"
-                required
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <InputLabel htmlFor="firstName">名</InputLabel>
-              <Input
-                id="firstName"
-                type="text"
-                required
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </FormControl>
-          </div>
-          <div style={{ padding: "20px" }}>
-            <Button type="submit" variant="contained">
-              サインアップ
+    <Container maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center"
+        }}>
+        <Typography component="h1" variant="h5">
+          サインアップ
+        </Typography>
+        <Box component="form" onSubmit={onSubmit} sx={{ mt: 3, width: "100%" }}>
+          <Stack spacing={3}>
+            <TextField
+              required
+              fullWidth
+              id="email"
+              label="メールアドレス"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              variant="outlined"
+            />
+
+            <TextField
+              required
+              fullWidth
+              id="password"
+              label="パスワード"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              variant="outlined"
+            />
+
+            <TextField
+              required
+              fullWidth
+              id="confirmPassword"
+              label="パスワード（確認）"
+              type="password"
+              value={passwordConf}
+              onChange={(e) => setPasswordConf(e.target.value)}
+              variant="outlined"
+            />
+
+            <TextField
+              required
+              fullWidth
+              id="lastName"
+              label="姓"
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              variant="outlined"
+            />
+
+            <TextField
+              required
+              fullWidth
+              id="firstName"
+              label="名"
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              variant="outlined"
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, mb: 2 }}>
+              登録する
             </Button>
-          </div>
-        </form>
-      </div>
-    </>
+          </Stack>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

@@ -1,5 +1,5 @@
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Button } from "@mui/material";
+import { Button, AppBar, Toolbar, Box } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -9,63 +9,67 @@ interface HeaderProps {
 
 const Header = ({ toggleDrawer }: HeaderProps) => {
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: "0",
-        right: 0,
-        left: 0,
-        width: "100%",
-        zIndex: 1000,
-        background: "linear-gradient(to right, aquamarine, pink)"
+    <AppBar
+      position="fixed"
+      sx={{
+        background: "linear-gradient(to right, aquamarine, pink)",
+        zIndex: 1000
       }}>
-      <nav>
-        <ul
-          style={{
+      <Toolbar>
+        <Box
+          component="nav"
+          sx={{
             display: "flex",
             justifyContent: "center",
-            margin: 0,
-            padding: 0,
-            listStyleType: "none",
-            height: "80px",
-            alignItems: "center" // 水平中央揃え
+            width: "100%"
           }}>
-          <li style={{ listStyle: "none", padding: "30px" }}>
-            <Button onClick={toggleDrawer(true)}>
-              <SettingsIcon></SettingsIcon>
-            </Button>
-          </li>
-          <li style={{ listStyle: "none", padding: "30px" }}>
-            <Link to="/">
-              <Button variant="contained" color="primary">
-                ホーム
+          <Box
+            component="ul"
+            sx={{
+              display: "flex",
+              margin: 0,
+              padding: 0,
+              listStyle: "none",
+              height: "80px",
+              alignItems: "center"
+            }}>
+            <Box component="li" sx={{ padding: "30px" }}>
+              <Button onClick={toggleDrawer(true)}>
+                <SettingsIcon />
               </Button>
-            </Link>
-          </li>
-          <li style={{ listStyle: "none", padding: "30px" }}>
-            <Link to="/music">
-              <Button variant="contained" color="success">
-                音楽へ
-              </Button>
-            </Link>
-          </li>
-          <li style={{ listStyle: "none", padding: "30px" }}>
-            <Link to="/images">
-              <Button variant="contained" color="warning">
-                画像アップロード
-              </Button>
-            </Link>
-          </li>
-          <li style={{ listStyle: "none", padding: "30px" }}>
-            <Link to="/imagesList">
-              <Button variant="contained" color="primary">
-                画像一覧
-              </Button>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </div>
+            </Box>
+            <Box component="li" sx={{ padding: "30px" }}>
+              <Link to="/">
+                <Button variant="contained" color="primary">
+                  ホーム
+                </Button>
+              </Link>
+            </Box>
+            <Box component="li" sx={{ padding: "30px" }}>
+              <Link to="/music">
+                <Button variant="contained" color="success">
+                  音楽へ
+                </Button>
+              </Link>
+            </Box>
+            <Box component="li" sx={{ padding: "30px" }}>
+              <Link to="/images">
+                <Button variant="contained" color="warning">
+                  画像アップロード
+                </Button>
+              </Link>
+            </Box>
+            <Box component="li" sx={{ padding: "30px" }}>
+              <Link to="/imagesList">
+                <Button variant="contained" color="primary">
+                  画像一覧
+                </Button>
+              </Link>
+            </Box>
+          </Box>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };
 

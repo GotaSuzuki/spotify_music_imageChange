@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import supabase from "../lib/supabase";
-import { Box, Button, IconButton, Stack } from "@mui/material";
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { SortableItem } from "../components/SortableItem";
 import CloseIcon from "@mui/icons-material/Close";
-import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from "notistack";
+import { SnackbarProvider, enqueueSnackbar, closeSnackbar } from "notistack";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   imagesOrderLengthSelector,
@@ -34,7 +34,7 @@ const Images = () => {
     if (recoilImagesOrderLength === 0) {
       getImages();
     }
-  }, []);
+  }, [recoilImagesOrderLength, getImages]);
 
   const saveMedia = () => {
     const newImages = recoilImagesOrder.map((image, index) => {
@@ -74,7 +74,9 @@ const Images = () => {
         });
 
       if (existingFile && existingFile.length > 0) {
-        alert("同じファイル名で登録することは出来ません");
+        enqueueSnackbar("同じファイル名で登録することは出来ません", {
+          variant: "error"
+        });
         return;
       }
 
@@ -86,76 +88,67 @@ const Images = () => {
         throw error;
       }
 
-      //  Images.jsxのリストを更新するため
       await getImages();
-      // ImagesList.jsxのリストを更新するため
       await getAllImages();
+      enqueueSnackbar("画像のアップロードに成功しました！", {
+        variant: "success"
+      });
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("画像のアップロードに失敗しました。");
+      enqueueSnackbar("画像のアップロードに失敗しました。", {
+        variant: "error"
+      });
     }
   };
 
   return (
-    <>
-      <div style={{ marginTop: "40px" }}>
-        <SnackbarProvider />
-      </div>
-      <div>
+    <Box mt={4}>
+      <SnackbarProvider />
+      <Box mb={2}>
         {recoilImagesOrderLength < MAX_IMAGES_LENGTH && (
-          <div>
+          <Typography variant="body1" color="textPrimary">
             残りの画像保存枚数：
-            <span style={{ color: "red" }}>
+            <Typography component="span" color="error">
               {MAX_IMAGES_LENGTH - recoilImagesOrderLength}
-            </span>
-          </div>
+            </Typography>
+          </Typography>
         )}
-      </div>
+      </Box>
 
       <InputFileUpload uploadImage={uploadImage} />
-      <div>
-        <Box sx={{ padding: 1 }}>
-          <Box
-            sx={{
-              p: 2,
-              border: "2px solid black",
-              overflowX: "auto",
-              width: "fit-content",
-              maxWidth: "100%",
-              display: "inline-block"
-            }}>
-            <DndContext
-              onDragEnd={(event) => {
-                const { active, over } = event;
-                if (over == null) {
-                  return;
-                }
-                if (active.id !== over.id) {
-                  setRecoilImagesOrder((media) => {
-                    const oldIndex = media.findIndex(
-                      (image) => image.id === active.id
-                    );
-                    const newIndex = media.findIndex(
-                      (image) => image.id === over.id
-                    );
-                    return arrayMove(media, oldIndex, newIndex);
-                  });
-                }
-              }}>
-              <SortableContext items={recoilImagesOrder}>
-                <Stack direction="row" spacing={2} sx={{ flexWrap: "nowrap" }}>
-                  {recoilImagesOrder.map((image) => (
-                    <SortableItem
-                      id={image.id}
-                      name={image.publicUrl}
-                      key={image.id}
-                    />
-                  ))}
-                </Stack>
-              </SortableContext>
-            </DndContext>
-          </Box>
-        </Box>
+
+      <Box mt={2} sx={{ p: 2, border: "2px solid black", overflowX: "auto" }}>
+        <DndContext
+          onDragEnd={(event) => {
+            const { active, over } = event;
+            if (!over) return;
+            if (active.id !== over.id) {
+              setRecoilImagesOrder((media) => {
+                const oldIndex = media.findIndex(
+                  (image) => image.id === active.id
+                );
+                const newIndex = media.findIndex(
+                  (image) => image.id === over.id
+                );
+                return arrayMove(media, oldIndex, newIndex);
+              });
+            }
+          }}>
+          <SortableContext items={recoilImagesOrder}>
+            <Stack direction="row" spacing={2} sx={{ flexWrap: "nowrap" }}>
+              {recoilImagesOrder.map((image) => (
+                <SortableItem
+                  id={image.id}
+                  name={image.publicUrl}
+                  key={image.id}
+                />
+              ))}
+            </Stack>
+          </SortableContext>
+        </DndContext>
+      </Box>
+
+      <Box mt={2} textAlign="center">
         <Button
           variant="contained"
           color="primary"
@@ -173,8 +166,8 @@ const Images = () => {
           }}>
           保存
         </Button>
-      </div>
-    </>
+      </Box>
+    </Box>
   );
 };
 

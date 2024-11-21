@@ -28,7 +28,7 @@ const ImagesList = () => {
     if (recoilImagesLength === 0) {
       getAllImages();
     }
-  }, []);
+  }, [recoilImagesLength, getAllImages]);
 
   const handleDelete = async (name) => {
     const { error } = await supabase.storage

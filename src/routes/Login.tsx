@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../lib/supabase";
-import { Button, Input, InputLabel } from "@mui/material";
+import { Box, Button, Input, InputLabel, Typography } from "@mui/material";
 import { FormControl } from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { userIdState } from "../atoms/useIdState";
@@ -41,54 +41,65 @@ const Login = ({ setUserName }) => {
   };
 
   return (
-    <div>
-      <main>
-        <div>
-          <form onSubmit={onLogin}>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-              <FormControl>
-                <InputLabel htmlFor="mail">メールアドレス</InputLabel>
-                <Input
-                  id="mail"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <InputLabel htmlFor="password">パスワード</InputLabel>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <InputLabel htmlFor="confirmPassword">
-                  パスワード（確認）
-                </InputLabel>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  required
-                  value={passwordConf}
-                  onChange={(e) => setPasswordConf(e.target.value)}
-                />
-              </FormControl>
-            </div>
-            <div style={{ padding: "20px" }}>
-              <Button type="submit" variant="contained">
-                ログイン
-              </Button>
-            </div>
-          </form>
-        </div>
-      </main>
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        px: 2,
+        gap: 2
+      }}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        ログイン
+      </Typography>
+      <form onSubmit={onLogin} style={{ width: "100%", maxWidth: "400px" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <FormControl>
+            <InputLabel htmlFor="email">メールアドレス</InputLabel>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              aria-describedby="email-helper-text"
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="password">パスワード</InputLabel>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel htmlFor="passwordConf">パスワード（確認）</InputLabel>
+            <Input
+              id="passwordConf"
+              type="password"
+              value={passwordConf}
+              onChange={(e) => setPasswordConf(e.target.value)}
+              required
+            />
+          </FormControl>
+        </Box>
+        <Box sx={{ mt: 3 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            size="large">
+            ログイン
+          </Button>
+        </Box>
+      </form>
+    </Box>
   );
 };
 

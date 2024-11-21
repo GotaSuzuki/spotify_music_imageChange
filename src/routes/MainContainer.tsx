@@ -7,8 +7,16 @@ import { imagesOrderState } from "../atoms/imagesState";
 import useCommon from "../hooks/useCommon";
 import { useRecoilValue } from "recoil";
 import ReactFullscreen from "react-easyfullscreen";
-import { Button } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  IconButton,
+  Typography
+} from "@mui/material";
 import React from "react";
+import { Fullscreen, FullscreenExit } from "@mui/icons-material";
 
 type Track = {
   preview_url: string;
@@ -105,52 +113,93 @@ const MainContainer = () => {
     }
   };
 
-  if (error) return <div>Error: {error}</div>;
-  if (!track) return <div>Loading...</div>;
+  if (error) return <Typography color="error">エラー: {error}</Typography>;
+  if (!track)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh">
+        <CircularProgress />
+      </Box>
+    );
 
   return (
-    <div>
-      <div>
-        <h1
+    <Container maxWidth="sm">
+      <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
+        <Typography
+          variant="h4"
           onClick={handlePlayClick}
-          style={{ cursor: "pointer", marginTop: "45px" }}>
-          {isPlaying ? <div>停止</div> : <div>再生</div>}
-        </h1>
-      </div>
+          sx={{
+            cursor: "pointer",
+            userSelect: "none",
+            mb: 2
+          }}>
+          {isPlaying ? "停止" : "再生"}
+        </Typography>
 
-      <audio ref={audioRef} />
-      <ReactFullscreen>
-        {({ ref, onRequest }) => (
-          <div
-            ref={ref as unknown as React.RefObject<HTMLDivElement>}
-            style={{ width: "100%", height: "100%" }}>
-            {!isFullScreen && (
-              <div>
-                <Button variant="outlined" onClick={() => onRequest()}>
-                  FullScreen
-                </Button>
-              </div>
-            )}
-            <AnimatePresence>
-              {currentImage && (
-                <motion.img
-                  key={currentImage}
-                  style={
-                    isFullScreen
-                      ? { width: "100%", height: "100%" }
-                      : { width: "500px", height: "500px" }
-                  }
-                  src={currentImage}
-                  initial={{ x: 0, y: -200, scale: 0 }}
-                  animate={{ x: 0, y: 0, scale: 1 }}
-                  transition={{ duration: 0.6, type: "spring", bounce: 0.8 }}
-                />
+        <audio ref={audioRef} />
+
+        <ReactFullscreen>
+          {({ ref, onRequest, onExit }) => (
+            <Box
+              ref={ref as unknown as React.RefObject<HTMLDivElement>}
+              width="100%"
+              height="auto"
+              position="relative">
+              {!isFullScreen && (
+                <Box textAlign="center" mb={2}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      onRequest();
+                      setIsFullScreen(true);
+                    }}
+                    startIcon={<Fullscreen />}>
+                    フルスクリーン
+                  </Button>
+                </Box>
               )}
-            </AnimatePresence>
-          </div>
-        )}
-      </ReactFullscreen>
-    </div>
+
+              {isFullScreen && (
+                <IconButton
+                  onClick={() => {
+                    onExit();
+                    setIsFullScreen(false);
+                  }}
+                  sx={{
+                    position: "absolute",
+                    top: 10,
+                    right: 10,
+                    zIndex: 1000,
+                    color: "white"
+                  }}>
+                  <FullscreenExit />
+                </IconButton>
+              )}
+
+              <AnimatePresence>
+                {currentImage && (
+                  <motion.img
+                    key={currentImage}
+                    src={currentImage}
+                    style={{
+                      width: isFullScreen ? "100vw" : "100%",
+                      height: isFullScreen ? "100vh" : "auto",
+                      objectFit: "contain"
+                    }}
+                    initial={{ x: 0, y: -200, scale: 0 }}
+                    animate={{ x: 0, y: 0, scale: 1 }}
+                    transition={{ duration: 0.6, type: "spring", bounce: 0.8 }}
+                  />
+                )}
+              </AnimatePresence>
+            </Box>
+          )}
+        </ReactFullscreen>
+      </Box>
+    </Container>
   );
 };
 

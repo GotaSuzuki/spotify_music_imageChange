@@ -2,7 +2,7 @@ import React from "react";
 import { useRecoilValue } from "recoil";
 import { userIdState } from "../atoms/useIdState";
 import { Link as RouterLink } from "react-router-dom";
-import { LinkProps, Link as MuiLink } from "@mui/material";
+import { Typography, Box, Link as MuiLink, LinkProps } from "@mui/material";
 
 // MUIのLinkとReact RouterのLinkを組み合わせたカスタムコンポーネント
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps & { to: string }>(
@@ -13,30 +13,33 @@ const Home = () => {
   const userId = useRecoilValue(userIdState);
 
   return (
-    <>
+    <Box textAlign="center" mt={4}>
+      <Typography variant="h4" gutterBottom>
+        ようこそ
+      </Typography>
       {userId ? (
-        <div>
-          <h1>ようこそ</h1>
-          <h2>
-            <Link to="/music">Music slide show</Link>
-          </h2>
-        </div>
+        <Typography variant="h5">
+          <Link to="/music" underline="hover">
+            Music slide show
+          </Link>
+        </Typography>
       ) : (
-        <div>
-          <h1>ようこそ</h1>
-          <div>
-            <Link to="/music" underline="hover" variant="h5">
+        <Box>
+          <Typography variant="h5">
+            <Link to="/music" underline="hover">
               Music slide show
             </Link>
-          </div>
-          <div style={{ paddingTop: "30px" }}>
-            <Link to="/music" underline="always" variant="h6">
-              ログインしてね
-            </Link>
-          </div>
-        </div>
+          </Typography>
+          <Box mt={4}>
+            <Typography variant="h6">
+              <Link to="/music" underline="always">
+                ログインしてね
+              </Link>
+            </Typography>
+          </Box>
+        </Box>
       )}
-    </>
+    </Box>
   );
 };
 

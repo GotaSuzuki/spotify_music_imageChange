@@ -7,7 +7,8 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Drawer as MuiDrawer
+  Drawer as MuiDrawer,
+  Typography
 } from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { userIdState } from "../atoms/useIdState";
@@ -106,12 +107,14 @@ const CustomDrawer: React.FC<DrawerProps> = ({
   );
 
   return (
-    <div>
+    <Box>
       <MuiDrawer open={open} onClose={toggleDrawer(false)}>
-        <h2 style={{ paddingLeft: "20px" }}>{userName || "ゲスト"}さん</h2>
+        <Box sx={{ padding: "20px" }}>
+          <Typography variant="h6">{userName || "ゲスト"}さん</Typography>
+        </Box>
         {DrawerList}
       </MuiDrawer>
-    </div>
+    </Box>
   );
 };
 
