@@ -8,16 +8,13 @@ import {
   Toolbar,
   styled
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import CustomDrawer from "../CustomDrawer";
 
 interface AppLayoutProps {
   userName: string;
   setUserName: (name: string) => void;
-  toggleDrawer: (open: boolean) => () => void;
-  open: boolean;
-  setOpen: (open: boolean) => void;
 }
 
 // スタイル付きのLinkコンポーネント
@@ -26,13 +23,13 @@ const StyledLink = styled(Link)({
   color: "inherit"
 });
 
-const AppLayout = ({
-  toggleDrawer,
-  userName,
-  setUserName,
-  open,
-  setOpen
-}: AppLayoutProps) => {
+const [open, setOpen] = useState(false);
+
+const toggleDrawer = (newOpen) => () => {
+  setOpen(newOpen);
+};
+
+const AppLayout = ({ userName, setUserName }: AppLayoutProps) => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <CustomDrawer

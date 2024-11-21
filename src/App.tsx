@@ -14,27 +14,14 @@ import AppLayout from "./components/Layout/AppLayout";
 
 function App() {
   const [userName, setUserName] = useState("");
-  const [open, setOpen] = useState(false);
   const [userId] = useRecoilState(userIdState);
-
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
 
   return (
     <>
       <Routes>
         <Route
           path="/"
-          element={
-            <AppLayout
-              userName={userName}
-              setUserName={setUserName}
-              toggleDrawer={toggleDrawer}
-              open={open}
-              setOpen={setOpen}
-            />
-          }>
+          element={<AppLayout userName={userName} setUserName={setUserName} />}>
           <Route path="/login" element={<Login setUserName={setUserName} />} />
           <Route
             path="/SignUp"
