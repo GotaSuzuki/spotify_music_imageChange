@@ -95,3 +95,16 @@ export interface AppLayoutProps {
   userName: string;
   setUserName: (name: string) => void;
 }
+
+export interface Track {
+  previewUrl: string;
+  // Add any other properties you need
+}
+
+export interface handlePlayClickParams {
+  track: Track | null;
+  audioRef: React.RefObject<HTMLAudioElement>;
+  isPlaying: boolean;
+  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsFullScreen: React.Dispatch<React.SetStateAction<boolean>>;
+}

@@ -2,7 +2,11 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { imagesOrderState, imagesState } from "../atoms/imagesState";
 import supabase from "../lib/supabase";
 import { userIdState } from "../atoms/useIdState";
-import { handleItemClickParams, RecoilImagesOrder } from "../types/index";
+import {
+  handleItemClickParams,
+  handlePlayClickParams,
+  RecoilImagesOrder
+} from "../types/index";
 import { RecoilCutImages } from "../types/index";
 
 const useCommon = () => {
@@ -114,7 +118,27 @@ const useCommon = () => {
     setOpen(false);
   };
 
-  return { getImages, getAllImages, handleItemClick };
+  //再生と停止の制御
+  const handlePlayClick = ({
+    track,
+    audioRef,
+    isPlaying,
+    setIsPlaying,
+    setIsFullScreen
+  }: handlePlayClickParams) => {
+    if (track && audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.src = track.previewUrl;
+        audioRef.current.play();
+        setIsFullScreen(false);
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  return { getImages, getAllImages, handleItemClick, handlePlayClick };
 };
 
 export default useCommon;

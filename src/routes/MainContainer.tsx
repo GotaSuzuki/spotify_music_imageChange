@@ -17,10 +17,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Fullscreen, FullscreenExit } from "@mui/icons-material";
-
-type Track = {
-  preview_url: string;
-};
+import { Track } from "../types";
 
 const MainContainer = () => {
   const [track, setTrack] = useState<Track | null>(null);
@@ -32,6 +29,7 @@ const MainContainer = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const recoilImagesOrder = useRecoilValue(imagesOrderState);
+  const { handlePlayClick } = useCommon();
 
   const { getImages } = useCommon();
 
@@ -99,18 +97,14 @@ const MainContainer = () => {
     }
   }, [track, recoilImagesOrder]);
 
-  //再生と停止の制御
-  const handlePlayClick = () => {
-    if (track && audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.src = track.preview_url;
-        audioRef.current.play();
-        setIsFullScreen(false);
-      }
-      setIsPlaying(!isPlaying);
-    }
+  const onPlayClick = () => {
+    handlePlayClick({
+      track,
+      audioRef,
+      isPlaying,
+      setIsPlaying,
+      setIsFullScreen
+    });
   };
 
   if (error) return <Typography color="error">エラー: {error}</Typography>;
@@ -130,7 +124,7 @@ const MainContainer = () => {
       <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
         <Typography
           variant="h4"
-          onClick={handlePlayClick}
+          onClick={onPlayClick}
           sx={{
             cursor: "pointer",
             userSelect: "none",
