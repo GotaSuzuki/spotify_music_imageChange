@@ -23,13 +23,12 @@ const StyledLink = styled(Link)({
   color: "inherit"
 });
 
-const [open, setOpen] = useState(false);
-
-const toggleDrawer = (newOpen) => () => {
-  setOpen(newOpen);
-};
-
 const AppLayout = ({ userName, setUserName }: AppLayoutProps) => {
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <CustomDrawer
