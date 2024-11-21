@@ -56,3 +56,20 @@ export interface SignUpParams {
   setUserName: (name: string) => void;
   navigate: NavigateFunction;
 }
+
+export interface LogoutParams {
+  setUserName: (name: string) => void;
+  setUserId: (id: string | undefined) => void;
+  setRecoilImages: (images: RecoilImagesOrder[]) => void;
+  setRecoilImagesOrder: (images: RecoilImagesOrder[]) => void;
+  setOpen: (open: boolean) => void;
+  navigate: NavigateFunction;
+}
+
+export interface DrawerProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  userName: string;
+  setUserName: (name: string) => void;
+  toggleDrawer: (open: boolean) => () => void;
+}

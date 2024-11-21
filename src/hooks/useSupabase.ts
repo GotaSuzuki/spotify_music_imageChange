@@ -3,10 +3,9 @@ import {
   LoginParams,
   UploadImageParams,
   DeleteImageParams,
-  SignUpParams
+  SignUpParams,
+  LogoutParams
 } from "../types/index";
-
-
 
 const useSupabase = () => {
   const loginUser = async ({
@@ -128,7 +127,7 @@ const useSupabase = () => {
     lastName,
     setUserName,
     navigate
-  }) => {
+  }: SignUpParams) => {
     e.preventDefault();
     if (password !== passwordConf) {
       alert("パスワードが一致しません");
@@ -155,7 +154,30 @@ const useSupabase = () => {
     }
   };
 
-  return { loginUser, uploadImage, deleteImage, signUp };
+  const logout = async ({
+    setUserName,
+    setUserId,
+    setRecoilImages,
+    setRecoilImagesOrder,
+    setOpen,
+    navigate
+  }: LogoutParams) => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      setUserName("");
+      setUserId("");
+      setRecoilImages([]);
+      setRecoilImagesOrder([]);
+      if (error) throw error;
+      alert("ログアウトしました");
+      setOpen(false);
+      navigate("/");
+    } catch {
+      alert("エラーが発生しました");
+    }
+  };
+
+  return { loginUser, uploadImage, deleteImage, signUp, logout };
 };
 
 export default useSupabase;

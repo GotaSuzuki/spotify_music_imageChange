@@ -14,14 +14,8 @@ import { useSetRecoilState } from "recoil";
 import { userIdState } from "../atoms/useIdState";
 import { imagesOrderState, imagesState } from "../atoms/imagesState";
 import React from "react";
-
-interface DrawerProps {
-  userName: string;
-  setUserName: (name: string) => void;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  toggleDrawer: (open: boolean) => () => void;
-}
+import useSupabase from "../hooks/useSupabase";
+import { DrawerProps } from "../types";
 
 const CustomDrawer: React.FC<DrawerProps> = ({
   open,
@@ -31,10 +25,11 @@ const CustomDrawer: React.FC<DrawerProps> = ({
   toggleDrawer
 }: DrawerProps) => {
   const navigate = useNavigate();
-
   const setUserId = useSetRecoilState(userIdState);
   const setRecoilImages = useSetRecoilState(imagesState);
   const setRecoilImagesOrder = useSetRecoilState(imagesOrderState);
+
+  const { logout } = useSupabase();
 
   const updateUserName = async () => {
     const { data } = await supabase.auth.getUser();
@@ -63,28 +58,19 @@ const CustomDrawer: React.FC<DrawerProps> = ({
         navigate("/login");
         break;
       case "ログアウト":
-        await Logout();
+        await logout({
+          setUserName,
+          setUserId,
+          setRecoilImages,
+          setRecoilImagesOrder,
+          setOpen,
+          navigate
+        });
         break;
       default:
         toggleDrawer(false)();
     }
     setOpen(false);
-  };
-
-  const Logout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      setUserName("");
-      setUserId("");
-      setRecoilImages([]);
-      setRecoilImagesOrder([]);
-      if (error) throw error;
-      alert("ログアウトしました");
-      setOpen(false);
-      navigate("/");
-    } catch {
-      alert("エラーが発生しました");
-    }
   };
 
   const DrawerList = (
