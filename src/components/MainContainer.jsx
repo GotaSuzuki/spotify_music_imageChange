@@ -3,14 +3,35 @@ import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import spotify from "../lib/spotify";
 import { useEffect } from "react";
+import { imagesOrderState } from "../atoms/imagesState";
+import useCommon from "../hooks/useCommon";
+import { useRecoilValue } from "recoil";
+import ReactFullscreen from "react-easyfullscreen";
+import { Button } from "@mui/material";
 
-const MainContainer = ({ images }) => {
+const MainContainer = () => {
   const [track, setTrack] = useState(null);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [currentImage, setCurrentImage] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const recoilImagesOrder = useRecoilValue(imagesOrderState);
+
+  const { getImages } = useCommon();
+
+  // 初回に画像が保存されていないときに実行
+  useEffect(() => {
+    const fetchData = async () => {
+      if (recoilImagesOrder.length === 0) {
+        await getImages();
+      }
+    };
+
+    fetchData();
+  }, []);
 
   //特定の音楽を取得
   useEffect(() => {
@@ -25,20 +46,21 @@ const MainContainer = ({ images }) => {
     fetchTrack();
   }, []);
 
+  // 音楽の再生している秒数とrecoilImagesOrderに保存されている秒数が一致している画像のUrlをセット
   useEffect(() => {
     if (audioRef.current) {
       const audio = audioRef.current;
 
       const updateTime = () => {
         setCurrentTime(audio.currentTime);
-        //上記のimagesのtime(start,end)によってstateに格納
-        const currentImg = images.find(
+        //recoilImagesOrderのtime(start,end)によってstateに格納
+        const currentImg = recoilImagesOrder.find(
           (img) => audio.currentTime >= img.start && audio.currentTime < img.end
         );
         if (currentImg) {
-          setCurrentImage(currentImg.src);
+          setCurrentImage(currentImg.publicUrl); // 画像のUrlをセット
         } else {
-          setCurrentImage(null); // どの画像も一致しない場合
+          setCurrentImage(recoilImagesOrder[0]); // どの画像も一致しない場合
         }
 
         if (audio.currentTime >= 30) {
@@ -57,7 +79,7 @@ const MainContainer = ({ images }) => {
         );
       };
     }
-  }, [track, images]);
+  }, [track, recoilImagesOrder]);
 
   //再生と停止の制御
   const handlePlayClick = () => {
@@ -67,6 +89,7 @@ const MainContainer = ({ images }) => {
       } else {
         audioRef.current.src = track.preview_url;
         audioRef.current.play();
+        setIsFullScreen(false);
       }
       setIsPlaying(!isPlaying);
     }
@@ -77,34 +100,48 @@ const MainContainer = ({ images }) => {
 
   return (
     <div>
-      <div
-        style={{
-          position: "relative",
-          top: "0",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "10%",
-        }}
-      >
-        <h1 onClick={handlePlayClick} style={{ cursor: "pointer" }}>
-          {track.name}
+      <div>
+        <h1
+          onClick={handlePlayClick}
+          style={{ cursor: "pointer", marginTop: "45px" }}
+        >
+          {isPlaying ? <div>停止</div> : <div>再生</div>}
         </h1>
       </div>
-      <AnimatePresence>
-        {currentImage && (
-          <motion.img
-            key={currentImage}
-            style={{ width: "600px", height: "500px" }}
-            src={currentImage}
-            alt="Current"
-            initial={{ x: 0, y: -200, scale: 0 }}
-            animate={{ x: 0, y: 0, scale: 1 }}
-            transition={{ duration: 0.6, type: "spring", bounce: 0.8 }}
-          />
-        )}
-      </AnimatePresence>
+
       <audio ref={audioRef} />
-      {/* <div>Current Time: {currentTime.toFixed(5)} seconds</div> */}
+      <ReactFullscreen>
+        {({ ref, onRequest }) => (
+          <div ref={ref} style={{ width: "100%", height: "100%" }}>
+            {!isFullScreen && (
+              <div>
+                <Button
+                  variant="outlined"
+                  onClick={() => onRequest(setIsFullScreen(true))}
+                >
+                  FullScreen
+                </Button>
+              </div>
+            )}
+            <AnimatePresence>
+              {currentImage && (
+                <motion.img
+                  key={currentImage}
+                  style={
+                    isFullScreen
+                      ? { width: "100%", height: "100%" }
+                      : { width: "500px", height: "500px" }
+                  }
+                  src={currentImage}
+                  initial={{ x: 0, y: -200, scale: 0 }}
+                  animate={{ x: 0, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, type: "spring", bounce: 0.8 }}
+                />
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+      </ReactFullscreen>
     </div>
   );
 };
