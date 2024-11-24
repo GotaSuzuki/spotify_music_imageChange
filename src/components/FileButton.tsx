@@ -1,6 +1,13 @@
+// typescriptの導入のみ
+
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import React from "react";
+
+interface FileButtonProps {
+  uploadImage: (file: File) => Promise<void>;
+}
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -14,12 +21,12 @@ const VisuallyHiddenInput = styled("input")({
   width: 1
 });
 
-export default function InputFileUpload({ uploadImage }) {
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      await uploadImage(file);
-    }
+export default function InputFileUpload({ uploadImage }: FileButtonProps) {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) await uploadImage(file);
   };
 
   return (

@@ -1,11 +1,14 @@
-import { atom, selector } from "recoil";
+// typescriptの導入のみ
 
-export const imagesState = atom({
+import { atom, selector } from "recoil";
+import { RecoilImagesOrder, RecoilCutImages } from "../types/index";
+
+export const imagesState = atom<RecoilCutImages[]>({
   key: "imagesState",
   default: []
 });
 
-export const imagesOrderState = atom({
+export const imagesOrderState = atom<RecoilImagesOrder[]>({
   key: "imagesOrderState",
   default: []
 });
