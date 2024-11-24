@@ -133,7 +133,7 @@ const MainContainer = () => {
           {isPlaying ? "停止" : "再生"}
         </Typography>
 
-        <audio ref={audioRef} />
+        <audio ref={audioRef} src={track.previewUrl} />
 
         <ReactFullscreen>
           {({ ref, onRequest, onExit }) => (
