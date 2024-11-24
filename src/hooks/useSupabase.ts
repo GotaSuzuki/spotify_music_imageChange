@@ -1,3 +1,6 @@
+// typescriptの導入
+// 別のcomponentやroutesに書かれていたSupabaseに関する関数をこちらのファイルに移行
+
 import supabase from "../lib/supabase";
 import {
   LoginParams,
