@@ -35,7 +35,7 @@ export interface UploadImageParams {
   userId: string;
   getImages: () => void;
   getAllImages: () => void;
-  enqueueSnackbar: (message: string, options?: any) => void;
+  enqueueSnackbar: (message: string, options?: OptionsObject) => void;
 }
 
 export interface DeleteImageParams {
@@ -46,8 +46,20 @@ export interface DeleteImageParams {
   userId: string;
   getImages: () => void;
   getAllImages: () => void;
-  enqueueSnackbar: (message: string, options?: any) => void;
+  enqueueSnackbar: (message: string, options?: OptionsObject) => void;
   action: (key: number) => JSX.Element;
+}
+
+interface OptionsObject {
+  variant?: "default" | "error" | "success" | "warning" | "info";
+  autoHideDuration?: number;
+  anchorOrigin?: {
+    horizontal: "left" | "center" | "right";
+    vertical: "top" | "bottom";
+  };
+  preventDuplicate?: boolean;
+  persist?: boolean;
+  action?: (key: number) => JSX.Element;
 }
 
 export interface SignUpParams {
