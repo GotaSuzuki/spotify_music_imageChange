@@ -98,7 +98,6 @@ export interface AppLayoutProps {
 
 export interface Track {
   previewUrl: string;
-  // Add any other properties you need
 }
 
 export interface handlePlayClickParams {
