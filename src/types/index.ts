@@ -11,7 +11,6 @@ export interface RecoilImagesOrder {
   updated_at: string;
   created_at: string;
   last_accessed_at: string;
-  metadata: Record<string, any>;
 }
 
 export interface RecoilCutImages extends RecoilImagesOrder {
