@@ -2,6 +2,7 @@
 // 別のcomponentやroutesに書かれていたSupabaseに関する関数をこちらのファイルに移行
 
 import supabase from "../lib/supabase";
+import { PATHS } from "../utils/constants";
 import {
   LoginParams,
   UploadImageParams,
@@ -36,7 +37,7 @@ const useSupabase = () => {
       setUserName(displayName);
 
       alert("ログインしました");
-      navigate("/");
+      navigate(PATHS.HOME);
     } catch {
       alert("エラーが発生しました");
     }
@@ -152,7 +153,7 @@ const useSupabase = () => {
       if (error) throw error;
       setUserName(`${lastName} ${firstName}`.trim());
       alert("登録しました");
-      navigate("/");
+      navigate(PATHS.HOME);
     } catch (error) {
       alert("エラーが発生しました: " + error.message);
     }
@@ -175,7 +176,7 @@ const useSupabase = () => {
       if (error) throw error;
       alert("ログアウトしました");
       setOpen(false);
-      navigate("/");
+      navigate(PATHS.HOME);
     } catch {
       alert("エラーが発生しました");
     }

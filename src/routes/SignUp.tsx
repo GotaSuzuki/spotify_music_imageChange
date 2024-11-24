@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import useSupabase from "../hooks/useSupabase";
+import { PATHS } from "../utils/constants";
 
 interface SignUpProps {
   setUserName: (name: string) => void;
@@ -38,7 +39,7 @@ const SignUp = ({ setUserName }: SignUpProps) => {
       setUserName,
       navigate
     });
-    navigate("/");
+    navigate(PATHS.HOME);
   };
 
   return (

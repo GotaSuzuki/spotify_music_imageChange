@@ -2,6 +2,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { Button, AppBar, Toolbar, Box } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
+import { PATHS } from "../utils/constants";
 
 interface HeaderProps {
   toggleDrawer: (open: boolean) => () => void;
@@ -39,7 +40,7 @@ const Header = ({ toggleDrawer }: HeaderProps) => {
               </Button>
             </Box>
             <Box component="li" sx={{ padding: "30px" }}>
-              <Link to="/">
+              <Link to={PATHS.HOME}>
                 <Button variant="contained" color="primary">
                   ホーム
                 </Button>

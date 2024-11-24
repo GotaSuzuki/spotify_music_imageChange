@@ -11,6 +11,7 @@ import ImagesList from "./routes/ImagesList";
 import MainContainer from "./routes/MainContainer";
 import React from "react";
 import AppLayout from "./components/Layout/AppLayout";
+import { PATHS } from "./utils/constants";
 
 function App() {
   const [userName, setUserName] = useState("");
@@ -20,26 +21,29 @@ function App() {
     <>
       <Routes>
         <Route
-          path="/"
+          path={PATHS.HOME}
           element={<AppLayout userName={userName} setUserName={setUserName} />}>
-          <Route path="/login" element={<Login setUserName={setUserName} />} />
           <Route
-            path="/SignUp"
+            path={PATHS.LOGIN}
+            element={<Login setUserName={setUserName} />}
+          />
+          <Route
+            path={PATHS.SIGNUP}
             element={<SignUp setUserName={setUserName} />}
           />
-          <Route path="/" element={<Home />} />
+          <Route path={PATHS.HOME} element={<Home />} />
           <Route
-            path="/music"
+            path={PATHS.MUSIC}
             element={
               userId ? <MainContainer /> : <Navigate replace to="/login" />
             }
           />
           <Route
-            path="/images"
+            path={PATHS.IMAGES}
             element={userId ? <Images /> : <Navigate replace to="/login" />}
           />
           <Route
-            path="/imagesList"
+            path={PATHS.IMAGESLIST}
             element={userId ? <ImagesList /> : <Navigate replace to="/login" />}
           />
         </Route>
