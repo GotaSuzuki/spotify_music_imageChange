@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState } from "react";
-import { Navigate, Route, Router, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userIdState } from "./atoms/useIdState";
 import Login from "./routes/Login";
@@ -9,9 +9,9 @@ import Home from "./routes/Home";
 import Images from "./routes/Images";
 import ImagesList from "./routes/ImagesList";
 import MainContainer from "./routes/MainContainer";
-import React from "react";
 import AppLayout from "./components/Layout/AppLayout";
 import { PATHS } from "./utils/constants";
+import React from "react";
 
 function App() {
   const [userName, setUserName] = useState("");

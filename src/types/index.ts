@@ -26,6 +26,10 @@ export interface LoginParams {
   navigate: NavigateFunction;
 }
 
+export interface LoginProps {
+  setUserName: (name: string) => void;
+}
+
 export interface UploadImageParams {
   file: File;
   userId: string;

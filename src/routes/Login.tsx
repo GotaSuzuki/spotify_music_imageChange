@@ -5,8 +5,9 @@ import { useSetRecoilState } from "recoil";
 import { userIdState } from "../atoms/useIdState";
 import React from "react";
 import useSupabase from "../hooks/useSupabase";
+import { LoginProps } from "../types";
 
-const Login = ({ setUserName }) => {
+const Login = ({ setUserName }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConf, setPasswordConf] = useState("");

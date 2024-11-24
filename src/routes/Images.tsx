@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import supabase from "../lib/supabase";
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import { DndContext } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
