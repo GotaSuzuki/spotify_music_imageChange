@@ -6,7 +6,7 @@ import { userIdState } from "../atoms/useIdState";
 const useCommon = () => {
   const originalTimes = [
     0, 2.5, 4.4, 6.2, 8, 9.8, 11.7, 13.6, 15.5, 17.3, 19.1, 21, 22.8, 24.6,
-    26.4, 28.2, 30,
+    26.4, 28.2, 30
   ];
 
   const setRecoilImagesOrder = useSetRecoilState(imagesOrderState);
@@ -18,7 +18,7 @@ const useCommon = () => {
       // ルートフォルダを指定する場合は空文字列を使用
       limit: 17,
       offset: 0,
-      sortBy: { column: "last_accessed_at", order: "desc" },
+      sortBy: { column: "last_accessed_at", order: "desc" }
     });
 
     if (error) {
@@ -33,7 +33,7 @@ const useCommon = () => {
         const start = originalTimes[index];
         const end = originalTimes[index + 1];
         const {
-          data: { publicUrl },
+          data: { publicUrl }
         } = supabase.storage.from("images").getPublicUrl(image.name);
         return { ...image, publicUrl, start, end };
       });
@@ -44,7 +44,7 @@ const useCommon = () => {
   const getAllImages = async () => {
     const { data, error } = await supabase.storage.from("images").list("", {
       offset: 0,
-      sortBy: { column: "last_accessed_at", order: "desc" },
+      sortBy: { column: "last_accessed_at", order: "desc" }
     });
 
     if (error) {
@@ -70,7 +70,7 @@ const useCommon = () => {
     const cutImagesName = imagesWithUrls.map((image) => {
       const newImageName = {
         ...image,
-        name: image.name.replace(userId, ""),
+        name: image.name.replace(userId, "")
       };
       return newImageName;
     });

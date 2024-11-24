@@ -9,10 +9,11 @@ export const SortableItem = ({ id, name }) => {
     listeners,
     transform,
     transition,
-    isDragging,
+    isDragging
   } = useSortable({
-    id,
+    id
   });
+
   return (
     <div
       ref={setNodeRef}
@@ -43,7 +44,7 @@ export const SortableItem = ({ id, name }) => {
           style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover", // 画像がBoxを埋めるようにする
+            objectFit: "cover" // 画像がBoxを埋めるようにする
           }}
         />
       </Box>

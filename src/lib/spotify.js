@@ -7,12 +7,12 @@ class SpotifyClient {
       {
         grant_type: "client_credentials",
         client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
-        client_secret: import.meta.env.VITE_SPOTIFY_CLIENT_SECRET,
+        client_secret: import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
       },
       {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
       }
     );
 
@@ -25,7 +25,7 @@ class SpotifyClient {
     const res = await axios.get(
       "https://api.spotify.com/v1/tracks/02q7qbOYbE89NMFEtOklcc",
       {
-        headers: { Authorization: "Bearer " + this.token },
+        headers: { Authorization: "Bearer " + this.token }
       }
     );
     return res.data;
