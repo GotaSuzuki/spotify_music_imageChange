@@ -186,7 +186,7 @@ const useSupabase = () => {
     setUserId
   }: UpdateUserProps) => {
     const { data } = await supabase.auth.getUser();
-    if (data && data.user && data.user.user_metadata) {
+    if (data?.user?.user_metadata) {
       const displayName =
         data.user.user_metadata.display_name ||
         `${data.user.user_metadata.last_name} ${data.user.user_metadata.first_name}`.trim();
