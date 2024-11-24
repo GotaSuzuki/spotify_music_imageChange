@@ -1,3 +1,5 @@
+// typescriptの導入のみ
+
 import { atom, selector } from "recoil";
 import { RecoilImagesOrder, RecoilCutImages } from "../types/index";
 

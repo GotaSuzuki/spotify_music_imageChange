@@ -1,3 +1,5 @@
+// typescriptの導入とMUIに統一,CSSの調整
+
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Box } from "@mui/material";

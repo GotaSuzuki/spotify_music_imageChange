@@ -1,3 +1,5 @@
+// typescriptの導入と特定の関数をこちらのファイルに移行
+
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { imagesOrderState, imagesState } from "../atoms/imagesState";
 import supabase from "../lib/supabase";
