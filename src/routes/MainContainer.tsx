@@ -22,7 +22,7 @@ import { Track } from "../types";
 const MainContainer = () => {
   const [track, setTrack] = useState<Track | null>(null);
   const [error, setError] = useState(null);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [, setCurrentTime] = useState(0);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);

@@ -18,7 +18,7 @@ class SpotifyClient {
       }
     );
 
-    let spotify = new SpotifyClient();
+    const spotify = new SpotifyClient();
     spotify.token = res.data.access_token;
     return spotify;
   }
