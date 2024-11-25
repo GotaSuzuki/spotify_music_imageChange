@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userIdState } from "./atoms/useIdState";
@@ -12,10 +12,20 @@ import MainContainer from "./routes/MainContainer";
 import AppLayout from "./components/Layout/AppLayout";
 import { PATHS } from "./utils/constants";
 import React from "react";
+import useSupabase from "./hooks/useSupabase";
 
 function App() {
   const [userName, setUserName] = useState("");
-  const [userId] = useRecoilState(userIdState);
+  const [userId, setUserId] = useRecoilState(userIdState);
+
+  const { updateUserName } = useSupabase();
+
+  useEffect(() => {
+    updateUserName({
+      setUserName,
+      setUserId
+    });
+  }, [setUserName, setUserId]);
 
   return (
     <>

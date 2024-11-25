@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -29,15 +28,8 @@ const CustomDrawer: React.FC<DrawerProps> = ({
   const setRecoilImages = useSetRecoilState(imagesState);
   const setRecoilImagesOrder = useSetRecoilState(imagesOrderState);
 
-  const { logout, updateUserName } = useSupabase();
+  const { logout } = useSupabase();
   const { handleItemClick } = useCommon();
-
-  useEffect(() => {
-    updateUserName({
-      setUserName,
-      setUserId
-    });
-  }, []);
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
