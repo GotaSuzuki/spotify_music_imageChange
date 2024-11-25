@@ -8,8 +8,8 @@ class SpotifyClient {
       "https://accounts.spotify.com/api/token",
       {
         grant_type: "client_credentials",
-        client_id: "479a9a4bd5b44b999184c1e64a5470d8",
-        client_secret: "aff02d49f3b44c409acab278c4c3a0ae"
+        client_id: import.meta.env.VITE_SPOTIFY_CLIENT_ID,
+        client_secret: import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
       },
       {
         headers: {
