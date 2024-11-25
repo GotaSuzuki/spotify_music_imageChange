@@ -124,7 +124,6 @@ const useSupabase = () => {
   };
 
   const signUp = async ({
-    e,
     email,
     password,
     passwordConf,
@@ -133,7 +132,6 @@ const useSupabase = () => {
     setUserName,
     navigate
   }: SignUpParams) => {
-    e.preventDefault();
     if (password !== passwordConf) {
       alert("パスワードが一致しません");
       return;

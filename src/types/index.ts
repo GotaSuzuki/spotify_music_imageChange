@@ -62,7 +62,6 @@ interface OptionsObject {
 }
 
 export interface SignUpParams {
-  e: React.FormEvent;
   email: string;
   password: string;
   passwordConf: string;
@@ -121,4 +120,8 @@ export interface handlePlayClickParams {
   isPlaying: boolean;
   setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
   setIsFullScreen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface signUpProps {
+  setUserName: (name: string) => void;
 }
