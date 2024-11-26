@@ -125,3 +125,17 @@ export interface handlePlayClickParams {
 export interface signUpProps {
   setUserName: (name: string) => void;
 }
+
+export interface signupInputs {
+  email: string;
+  password: string;
+  passwordConf: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface loginInputs {
+  email: string;
+  password: string;
+  passwordConf: string;
+}

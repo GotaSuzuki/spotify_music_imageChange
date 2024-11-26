@@ -10,18 +10,10 @@ import {
 import React from "react";
 import useSupabase from "../hooks/useSupabase";
 import { PATHS } from "../utils/constants";
-import { signUpProps } from "../types";
+import { signupInputs, signUpProps } from "../types";
 import { useForm } from "react-hook-form";
-import { validationSchema } from "../utils/validationSchema";
+import { sinUpvalidationSchema } from "../utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-interface Inputs {
-  email: string;
-  password: string;
-  passwordConf: string;
-  firstName: string;
-  lastName: string;
-}
 
 const SignUp = ({ setUserName }: signUpProps) => {
   const navigate = useNavigate();
@@ -32,9 +24,9 @@ const SignUp = ({ setUserName }: signUpProps) => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<Inputs>({ resolver: zodResolver(validationSchema) });
+  } = useForm<signupInputs>({ resolver: zodResolver(sinUpvalidationSchema) });
 
-  const onSubmit = async (data: Inputs) => {
+  const onSubmit = async (data: signupInputs) => {
     await signUp({
       email: data.email,
       password: data.password,

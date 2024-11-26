@@ -1,26 +1,30 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useSetRecoilState } from "recoil";
 import { userIdState } from "../atoms/useIdState";
 import React from "react";
 import useSupabase from "../hooks/useSupabase";
-import { LoginProps } from "../types";
+import { loginInputs, LoginProps } from "../types";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginValidationSchema } from "../utils/validationSchema";
 
 const Login = ({ setUserName }: LoginProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConf, setPasswordConf] = useState("");
   const navigate = useNavigate();
   const setUserId = useSetRecoilState(userIdState);
 
   const { loginUser } = useSupabase();
 
-  const onLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<loginInputs>({ resolver: zodResolver(loginValidationSchema) });
+
+  const onLogin = async (data: loginInputs) => {
     await loginUser({
-      email,
-      password,
+      email: data.email,
+      password: data.password,
       setUserId,
       setUserName,
       navigate
@@ -43,7 +47,7 @@ const Login = ({ setUserName }: LoginProps) => {
       </Typography>
       <Box
         component="form"
-        onSubmit={onLogin}
+        onSubmit={handleSubmit(onLogin)}
         sx={{
           width: "100%",
           maxWidth: "400px",
@@ -54,38 +58,33 @@ const Login = ({ setUserName }: LoginProps) => {
         <TextField
           label="メールアドレス"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
           fullWidth
           variant="outlined"
+          {...register("email")}
+          error={!!errors.email}
+          helperText={errors.email?.message}
         />
         <TextField
           label="パスワード"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
           fullWidth
           variant="outlined"
+          {...register("password")}
+          error={!!errors.password}
+          helperText={errors.password?.message}
         />
         <TextField
           label="パスワード（確認）"
           type="password"
-          value={passwordConf}
-          onChange={(e) => setPasswordConf(e.target.value)}
-          required
           fullWidth
           variant="outlined"
+          {...register("passwordConf")}
+          error={!!errors.passwordConf}
+          helperText={errors.passwordConf?.message}
         />
         <Box sx={{ mt: 3 }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            size="large">
-            ログイン
+          <Button type="submit" variant="contained" size="large" sx={{ mt: 2 }}>
+            Login
           </Button>
         </Box>
       </Box>
