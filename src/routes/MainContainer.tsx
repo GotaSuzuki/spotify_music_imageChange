@@ -41,7 +41,7 @@ const MainContainer = () => {
     };
 
     fetchData();
-  }, []);
+  }, [getImages, recoilImagesOrder.length]);
 
   //特定の音楽を取得
   useEffect(() => {
