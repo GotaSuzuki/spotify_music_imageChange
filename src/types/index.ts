@@ -139,3 +139,16 @@ export interface loginInputs {
   password: string;
   passwordConf: string;
 }
+
+export interface SortableItemProps {
+  id: string;
+  name: string;
+}
+
+export interface FileButtonProps {
+  uploadImage: (file: File) => Promise<void>;
+}
+
+export interface HeaderProps {
+  toggleDrawer: (open: boolean) => () => void;
+}

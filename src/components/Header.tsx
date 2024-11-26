@@ -3,10 +3,7 @@ import { Button, AppBar, Toolbar, Box } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import { PATHS } from "../utils/constants";
-
-interface HeaderProps {
-  toggleDrawer: (open: boolean) => () => void;
-}
+import { HeaderProps } from "../types";
 
 const Header = ({ toggleDrawer }: HeaderProps) => {
   return (

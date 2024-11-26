@@ -4,11 +4,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Box } from "@mui/material";
 import React from "react";
-
-interface SortableItemProps {
-  id: string;
-  name: string;
-}
+import { SortableItemProps } from "../types";
 
 export const SortableItem = ({ id, name }: SortableItemProps) => {
   const {
