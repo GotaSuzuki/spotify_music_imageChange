@@ -110,12 +110,8 @@ export interface AppLayoutProps {
   setUserName: (name: string) => void;
 }
 
-export interface Track {
-  previewUrl: string;
-}
-
 export interface handlePlayClickParams {
-  track: Track | null;
+  track: string | null;
   audioRef: React.RefObject<HTMLAudioElement>;
   isPlaying: boolean;
   setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;

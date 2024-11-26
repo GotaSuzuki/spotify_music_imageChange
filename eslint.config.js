@@ -19,7 +19,6 @@ export default [
       "react-hooks": pluginReactHooks,
     },
     rules: {
-      "@typescript-eslint/explicit-module-boundary-types": "warn",
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": ["error", {
         "varsIgnorePattern": "^React$"

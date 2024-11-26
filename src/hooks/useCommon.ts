@@ -132,7 +132,7 @@ const useCommon = () => {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        audioRef.current.src = track.previewUrl;
+        audioRef.current.src = track;
         audioRef.current.play();
         setIsFullScreen(false);
       }
