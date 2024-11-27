@@ -1,5 +1,3 @@
-import { useState } from "react";
-import supabase from "../lib/supabase";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -11,39 +9,43 @@ import {
 } from "@mui/material";
 import React from "react";
 import useSupabase from "../hooks/useSupabase";
+import { PATHS } from "../utils/constants";
+import { signupInputs, signUpProps } from "../types";
+import { useForm } from "react-hook-form";
+import { sinUpvalidationSchema } from "../utils/validationSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface SignUpProps {
-  setUserName: (name: string) => void;
-}
-
-const SignUp = ({ setUserName }: SignUpProps) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConf, setPasswordConf] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+const SignUp = ({ setUserName }: signUpProps) => {
   const navigate = useNavigate();
 
   const { signUp } = useSupabase();
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // react-hook-form,zodの導入
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<signupInputs>({ resolver: zodResolver(sinUpvalidationSchema) });
+
+  const onSubmit = async (data: signupInputs) => {
+    // react-hooks-formの導入により、eの削除
     await signUp({
-      e,
-      email,
-      password,
-      passwordConf,
-      firstName,
-      lastName,
+      email: data.email,
+      password: data.password,
+      passwordConf: data.passwordConf,
+      firstName: data.firstName,
+      lastName: data.lastName,
       setUserName,
       navigate
     });
-    navigate("/");
+    navigate(PATHS.HOME);
   };
 
   return (
     <Container maxWidth="xs">
       <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
         sx={{
           marginTop: 8,
           display: "flex",
@@ -53,73 +55,58 @@ const SignUp = ({ setUserName }: SignUpProps) => {
         <Typography component="h1" variant="h5">
           サインアップ
         </Typography>
-        <Box component="form" onSubmit={onSubmit} sx={{ mt: 3, width: "100%" }}>
-          <Stack spacing={3}>
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="メールアドレス"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              variant="outlined"
-            />
+        <Stack spacing={3}>
+          <TextField
+            fullWidth
+            label="Email"
+            variant="outlined"
+            {...register("email")}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
 
-            <TextField
-              required
-              fullWidth
-              id="password"
-              label="パスワード"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              variant="outlined"
-            />
+          <TextField
+            fullWidth
+            label="Password"
+            type="password"
+            variant="outlined"
+            {...register("password")}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+          />
 
-            <TextField
-              required
-              fullWidth
-              id="confirmPassword"
-              label="パスワード（確認）"
-              type="password"
-              value={passwordConf}
-              onChange={(e) => setPasswordConf(e.target.value)}
-              variant="outlined"
-            />
+          <TextField
+            fullWidth
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            {...register("passwordConf")}
+            error={!!errors.passwordConf}
+            helperText={errors.passwordConf?.message}
+          />
 
-            <TextField
-              required
-              fullWidth
-              id="lastName"
-              label="姓"
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              variant="outlined"
-            />
+          <TextField
+            fullWidth
+            label="First Name"
+            variant="outlined"
+            {...register("firstName")}
+            error={!!errors.firstName}
+            helperText={errors.firstName?.message}
+          />
 
-            <TextField
-              required
-              fullWidth
-              id="firstName"
-              label="名"
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              variant="outlined"
-            />
+          <TextField
+            fullWidth
+            label="Last Name"
+            variant="outlined"
+            {...register("lastName")}
+            error={!!errors.lastName}
+            helperText={errors.lastName?.message}
+          />
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              sx={{ mt: 3, mb: 2 }}>
-              登録する
-            </Button>
-          </Stack>
-        </Box>
+          <Button type="submit" variant="contained" size="large" sx={{ mt: 2 }}>
+            Register
+          </Button>
+        </Stack>
       </Box>
     </Container>
   );

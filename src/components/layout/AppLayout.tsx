@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import CustomDrawer from "../CustomDrawer";
 import { AppLayoutProps } from "../../types";
+import { PATHS } from "../../utils/constants";
 
 // スタイル付きのLinkコンポーネント
 const StyledLink = styled(Link)({
@@ -60,7 +61,7 @@ const AppLayout = ({ userName, setUserName }: AppLayoutProps) => {
               flexGrow: 1,
               justifyContent: "center"
             }}>
-            <StyledLink to="/">
+            <StyledLink to={PATHS.HOME}>
               <Button variant="contained" color="primary">
                 ホーム
               </Button>

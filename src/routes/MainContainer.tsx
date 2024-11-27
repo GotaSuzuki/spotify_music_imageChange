@@ -17,12 +17,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Fullscreen, FullscreenExit } from "@mui/icons-material";
-import { Track } from "../types";
 
 const MainContainer = () => {
-  const [track, setTrack] = useState<Track | null>(null);
+  const [track, setTrack] = useState("");
   const [error, setError] = useState(null);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [, setCurrentTime] = useState(0);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -42,14 +41,15 @@ const MainContainer = () => {
     };
 
     fetchData();
-  }, []);
+  }, [getImages, recoilImagesOrder.length]);
 
   //特定の音楽を取得
   useEffect(() => {
     async function fetchTrack() {
       try {
         const res = await spotify.getTrack();
-        setTrack(res);
+        console.log(res.preview_url);
+        setTrack(res.preview_url);
       } catch (err) {
         setError(err.message);
       }
@@ -133,7 +133,10 @@ const MainContainer = () => {
           {isPlaying ? "停止" : "再生"}
         </Typography>
 
-        <audio ref={audioRef} />
+        {/* 音楽が再生されるように修正/eslintで検出されるため以下のように修正 */}
+        <audio ref={audioRef}>
+          <track kind="captions" />
+        </audio>
 
         <ReactFullscreen>
           {({ ref, onRequest, onExit }) => (

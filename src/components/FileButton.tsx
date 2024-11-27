@@ -4,10 +4,7 @@ import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import React from "react";
-
-interface FileButtonProps {
-  uploadImage: (file: File) => Promise<void>;
-}
+import { FileButtonProps } from "../types";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",

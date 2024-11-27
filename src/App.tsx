@@ -1,6 +1,6 @@
 import "./App.css";
-import { useState } from "react";
-import { Navigate, Route, Router, Routes } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userIdState } from "./atoms/useIdState";
 import Login from "./routes/Login";
@@ -9,37 +9,53 @@ import Home from "./routes/Home";
 import Images from "./routes/Images";
 import ImagesList from "./routes/ImagesList";
 import MainContainer from "./routes/MainContainer";
-import React from "react";
 import AppLayout from "./components/Layout/AppLayout";
+import { PATHS } from "./utils/constants";
+import React from "react";
+import useSupabase from "./hooks/useSupabase";
 
 function App() {
   const [userName, setUserName] = useState("");
-  const [userId] = useRecoilState(userIdState);
+  const [userId, setUserId] = useRecoilState(userIdState);
 
+  const { updateUserName } = useSupabase();
+
+  // 純粋関数にするべく、updateUserNameを配置
+  useEffect(() => {
+    updateUserName({
+      setUserName,
+      setUserId
+    });
+  }, [setUserName, setUserId]);
+
+  // 以下はパスの定数化を反映
   return (
     <>
       <Routes>
         <Route
-          path="/"
+          path={PATHS.HOME}
           element={<AppLayout userName={userName} setUserName={setUserName} />}>
-          <Route path="/login" element={<Login setUserName={setUserName} />} />
           <Route
-            path="/SignUp"
+            path={PATHS.LOGIN}
+            element={<Login setUserName={setUserName} />}
+          />
+          <Route
+            path={PATHS.SIGNUP}
             element={<SignUp setUserName={setUserName} />}
           />
-          <Route path="/" element={<Home />} />
+          <Route path={PATHS.HOME} element={<Home />} />
           <Route
-            path="/music"
+            path={PATHS.MUSIC}
             element={
               userId ? <MainContainer /> : <Navigate replace to="/login" />
             }
           />
           <Route
-            path="/images"
+            path={PATHS.IMAGES}
             element={userId ? <Images /> : <Navigate replace to="/login" />}
           />
           <Route
-            path="/imagesList"
+            path={PATHS.IMAGESLIST}
             element={userId ? <ImagesList /> : <Navigate replace to="/login" />}
           />
         </Route>

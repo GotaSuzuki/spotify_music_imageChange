@@ -2,6 +2,7 @@
 // 別のcomponentやroutesに書かれていたSupabaseに関する関数をこちらのファイルに移行
 
 import supabase from "../lib/supabase";
+import { PATHS } from "../utils/constants";
 import {
   LoginParams,
   UploadImageParams,
@@ -36,7 +37,7 @@ const useSupabase = () => {
       setUserName(displayName);
 
       alert("ログインしました");
-      navigate("/");
+      navigate(PATHS.HOME);
     } catch {
       alert("エラーが発生しました");
     }
@@ -123,7 +124,6 @@ const useSupabase = () => {
   };
 
   const signUp = async ({
-    e,
     email,
     password,
     passwordConf,
@@ -132,7 +132,6 @@ const useSupabase = () => {
     setUserName,
     navigate
   }: SignUpParams) => {
-    e.preventDefault();
     if (password !== passwordConf) {
       alert("パスワードが一致しません");
       return;
@@ -152,7 +151,7 @@ const useSupabase = () => {
       if (error) throw error;
       setUserName(`${lastName} ${firstName}`.trim());
       alert("登録しました");
-      navigate("/");
+      navigate(PATHS.HOME);
     } catch (error) {
       alert("エラーが発生しました: " + error.message);
     }
@@ -175,7 +174,7 @@ const useSupabase = () => {
       if (error) throw error;
       alert("ログアウトしました");
       setOpen(false);
-      navigate("/");
+      navigate(PATHS.HOME);
     } catch {
       alert("エラーが発生しました");
     }
@@ -186,7 +185,8 @@ const useSupabase = () => {
     setUserId
   }: UpdateUserProps) => {
     const { data } = await supabase.auth.getUser();
-    if (data && data.user && data.user.user_metadata) {
+    // オプショナルチェインの導入
+    if (data?.user?.user_metadata) {
       const displayName =
         data.user.user_metadata.display_name ||
         `${data.user.user_metadata.last_name} ${data.user.user_metadata.first_name}`.trim();

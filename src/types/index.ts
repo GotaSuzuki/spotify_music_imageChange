@@ -11,7 +11,6 @@ export interface RecoilImagesOrder {
   updated_at: string;
   created_at: string;
   last_accessed_at: string;
-  metadata: Record<string, any>;
 }
 
 export interface RecoilCutImages extends RecoilImagesOrder {
@@ -26,12 +25,16 @@ export interface LoginParams {
   navigate: NavigateFunction;
 }
 
+export interface LoginProps {
+  setUserName: (name: string) => void;
+}
+
 export interface UploadImageParams {
   file: File;
   userId: string;
   getImages: () => void;
   getAllImages: () => void;
-  enqueueSnackbar: (message: string, options?: any) => void;
+  enqueueSnackbar: (message: string, options?: OptionsObject) => void;
 }
 
 export interface DeleteImageParams {
@@ -42,12 +45,23 @@ export interface DeleteImageParams {
   userId: string;
   getImages: () => void;
   getAllImages: () => void;
-  enqueueSnackbar: (message: string, options?: any) => void;
+  enqueueSnackbar: (message: string, options?: OptionsObject) => void;
   action: (key: number) => JSX.Element;
 }
 
+interface OptionsObject {
+  variant?: "default" | "error" | "success" | "warning" | "info";
+  autoHideDuration?: number;
+  anchorOrigin?: {
+    horizontal: "left" | "center" | "right";
+    vertical: "top" | "bottom";
+  };
+  preventDuplicate?: boolean;
+  persist?: boolean;
+  action?: (key: number) => JSX.Element;
+}
+
 export interface SignUpParams {
-  e: React.FormEvent;
   email: string;
   password: string;
   passwordConf: string;
@@ -96,14 +110,41 @@ export interface AppLayoutProps {
   setUserName: (name: string) => void;
 }
 
-export interface Track {
-  previewUrl: string;
-}
-
 export interface handlePlayClickParams {
-  track: Track | null;
+  track: string | null;
   audioRef: React.RefObject<HTMLAudioElement>;
   isPlaying: boolean;
   setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
   setIsFullScreen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface signUpProps {
+  setUserName: (name: string) => void;
+}
+
+export interface signupInputs {
+  email: string;
+  password: string;
+  passwordConf: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface loginInputs {
+  email: string;
+  password: string;
+  passwordConf: string;
+}
+
+export interface SortableItemProps {
+  id: string;
+  name: string;
+}
+
+export interface FileButtonProps {
+  uploadImage: (file: File) => Promise<void>;
+}
+
+export interface HeaderProps {
+  toggleDrawer: (open: boolean) => () => void;
 }
