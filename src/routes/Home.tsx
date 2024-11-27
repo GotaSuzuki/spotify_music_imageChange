@@ -10,9 +10,6 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps & { to: string }>(
   (props, ref) => <MuiLink component={RouterLink} ref={ref} {...props} />
 );
 
-// displayName を設定
-Link.displayName = "Link";
-
 const Home = () => {
   const userId = useRecoilValue(userIdState);
 
