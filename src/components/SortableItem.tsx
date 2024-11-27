@@ -1,8 +1,12 @@
+// typescriptの導入とMUIに統一,CSSの調整
+
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Box } from "@mui/material";
+import React from "react";
+import { SortableItemProps } from "../types";
 
-export const SortableItem = ({ id, name }) => {
+export const SortableItem = ({ id, name }: SortableItemProps) => {
   const {
     setNodeRef,
     attributes,
@@ -15,15 +19,15 @@ export const SortableItem = ({ id, name }) => {
   });
 
   return (
-    <div
+    <Box
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      style={{
+      sx={{
         transform: CSS.Transform.toString(transform),
         transition,
-      }}
-    >
+        display: "inline-block"
+      }}>
       <Box
         sx={{
           border: "1px solid black",
@@ -32,12 +36,10 @@ export const SortableItem = ({ id, name }) => {
           alignItems: "center",
           bgcolor: "white",
           cursor: isDragging ? "grabbing" : "grab",
-          width: "30px",
-          height: "30px",
-          overflow: "hidden",
-          padding: 1,
-        }}
-      >
+          width: 30,
+          height: 30,
+          overflow: "hidden"
+        }}>
         <img
           src={name}
           alt="Sortable item"
@@ -48,6 +50,6 @@ export const SortableItem = ({ id, name }) => {
           }}
         />
       </Box>
-    </div>
+    </Box>
   );
 };

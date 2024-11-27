@@ -1,6 +1,8 @@
+/// <reference types="vite/client" />
 import axios from "axios";
 
 class SpotifyClient {
+  token: string;
   static async initialize() {
     const res = await axios.post(
       "https://accounts.spotify.com/api/token",
@@ -16,7 +18,7 @@ class SpotifyClient {
       }
     );
 
-    let spotify = new SpotifyClient();
+    const spotify = new SpotifyClient();
     spotify.token = res.data.access_token;
     return spotify;
   }
