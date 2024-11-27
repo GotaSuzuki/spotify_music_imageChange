@@ -28,6 +28,7 @@ const CustomDrawer: React.FC<DrawerProps> = ({
   const setRecoilImages = useSetRecoilState(imagesState);
   const setRecoilImagesOrder = useSetRecoilState(imagesOrderState);
 
+  // 純粋関数にするために関数をApp.tsxに移動
   const { logout } = useSupabase();
   const { handleItemClick } = useCommon();
 

@@ -20,6 +20,7 @@ function App() {
 
   const { updateUserName } = useSupabase();
 
+  // 純粋関数にするべく、updateUserNameを配置
   useEffect(() => {
     updateUserName({
       setUserName,
@@ -27,6 +28,7 @@ function App() {
     });
   }, [setUserName, setUserId]);
 
+  // 以下はパスの定数化を反映
   return (
     <>
       <Routes>

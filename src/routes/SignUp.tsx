@@ -20,6 +20,7 @@ const SignUp = ({ setUserName }: signUpProps) => {
 
   const { signUp } = useSupabase();
 
+  // react-hook-form,zodの導入
   const {
     register,
     handleSubmit,
@@ -27,6 +28,7 @@ const SignUp = ({ setUserName }: signUpProps) => {
   } = useForm<signupInputs>({ resolver: zodResolver(sinUpvalidationSchema) });
 
   const onSubmit = async (data: signupInputs) => {
+    // react-hooks-formの導入により、eの削除
     await signUp({
       email: data.email,
       password: data.password,

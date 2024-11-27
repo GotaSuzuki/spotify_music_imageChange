@@ -15,6 +15,7 @@ const Login = ({ setUserName }: LoginProps) => {
 
   const { loginUser } = useSupabase();
 
+  // react-hook-form,zodの導入
   const {
     register,
     handleSubmit,

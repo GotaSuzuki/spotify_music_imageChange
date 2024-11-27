@@ -133,6 +133,7 @@ const MainContainer = () => {
           {isPlaying ? "停止" : "再生"}
         </Typography>
 
+        {/* 音楽が再生されるように修正/eslintで検出されるため以下のように修正 */}
         <audio ref={audioRef}>
           <track kind="captions" />
         </audio>

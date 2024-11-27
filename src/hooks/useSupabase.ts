@@ -185,6 +185,7 @@ const useSupabase = () => {
     setUserId
   }: UpdateUserProps) => {
     const { data } = await supabase.auth.getUser();
+    // オプショナルチェインの導入
     if (data?.user?.user_metadata) {
       const displayName =
         data.user.user_metadata.display_name ||
